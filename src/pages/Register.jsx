@@ -39,7 +39,7 @@ export default function Register() {
   }
 
   return (
-    <AuthLayout firstStepLabel="Зарегистрируйте свой аккаунт">
+    <AuthLayout>
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <h2>Зарегистрироваться</h2>
         <p className="auth-form-lead">Введите свои персональные данные для создания учётной записи.</p>

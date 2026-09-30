@@ -1,10 +1,8 @@
 import './auth.css';
 
-const STEPS = ['', 'Выберите должность', 'Настройте свой профиль'];
+const STEPS = ['Зарегистрируйте свой аккаунт', 'Выберите должность', 'Настройте свой профиль'];
 
-export default function AuthLayout({ firstStepLabel, children }) {
-  const steps = [firstStepLabel, ...STEPS.slice(1)];
-
+export default function AuthLayout({ children }) {
   return (
     <div className="auth-page">
       <div className="auth-hero-wrap">
@@ -17,7 +15,7 @@ export default function AuthLayout({ firstStepLabel, children }) {
               Выполните эти простые шаги, чтобы зарегистрировать свою учётную запись.
             </p>
             <ol className="auth-steps">
-              {steps.map((label, i) => (
+              {STEPS.map((label, i) => (
                 <li key={label} className={i === 0 ? 'active' : ''}>
                   <span className="auth-step-num">{i + 1}</span>
                   {label}

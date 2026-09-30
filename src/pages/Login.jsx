@@ -25,7 +25,7 @@ export default function Login() {
   }
 
   return (
-    <AuthLayout firstStepLabel="Войди в свой аккаунт">
+    <AuthLayout>
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <p className="auth-form-eyebrow">Solution Center</p>
         <h2>Войти</h2>
