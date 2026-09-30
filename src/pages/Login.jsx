@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../components/auth/AuthLayout';
 import { useAuth } from '../context/AuthContext';
+import { isValidEmail } from '../utils/validation';
 
 export default function Login() {
   const { login } = useAuth();
@@ -14,6 +15,10 @@ export default function Login() {
     e.preventDefault();
     if (!email.trim() || !password) {
       setError('Заполните email и пароль');
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setError('Введите корректный email');
       return;
     }
     const result = login(email, password);

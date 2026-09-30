@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../components/auth/AuthLayout';
 import { useAuth } from '../context/AuthContext';
 import { DEPARTMENTS } from '../data/constants';
+import { isValidEmail } from '../utils/validation';
 
 export default function Register() {
   const { register } = useAuth();
@@ -24,6 +25,10 @@ export default function Register() {
     e.preventDefault();
     if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim()) {
       setError('Заполните все поля');
+      return;
+    }
+    if (!isValidEmail(form.email)) {
+      setError('Введите корректный email');
       return;
     }
     if (form.password.length < 8) {
