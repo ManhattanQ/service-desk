@@ -15,7 +15,7 @@
   overflow: hidden;
   box-shadow: 0 30px 80px rgba(20, 10, 35, 0.18);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   background: var(--bg);
 }
 
