@@ -22,6 +22,10 @@ export default function Register() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim()) {
+      setError('Заполните все поля');
+      return;
+    }
     if (form.password.length < 8) {
       setError('Пароль должен содержать не менее 8 символов');
       return;
@@ -36,7 +40,7 @@ export default function Register() {
 
   return (
     <AuthLayout firstStepLabel="Зарегистрируйте свой аккаунт">
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <h2>Зарегистрироваться</h2>
         <p className="auth-form-lead">Введите свои персональные данные для создания учётной записи.</p>
 
@@ -45,11 +49,11 @@ export default function Register() {
         <div className="auth-row">
           <div className="auth-field">
             <label htmlFor="firstName">Имя</label>
-            <input id="firstName" value={form.firstName} onChange={update('firstName')} placeholder="Павел" required />
+            <input id="firstName" value={form.firstName} onChange={update('firstName')} placeholder="Павел" />
           </div>
           <div className="auth-field">
             <label htmlFor="lastName">Фамилия</label>
-            <input id="lastName" value={form.lastName} onChange={update('lastName')} placeholder="Гребенников" required />
+            <input id="lastName" value={form.lastName} onChange={update('lastName')} placeholder="Гребенников" />
           </div>
         </div>
 
@@ -61,7 +65,6 @@ export default function Register() {
             value={form.email}
             onChange={update('email')}
             placeholder="ivan.sokolov@company.local"
-            required
           />
         </div>
 
@@ -84,7 +87,6 @@ export default function Register() {
             value={form.password}
             onChange={update('password')}
             placeholder="Введите свой пароль"
-            required
           />
           <p className="auth-hint">Должен содержать не менее 8 символов.</p>
         </div>

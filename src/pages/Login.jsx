@@ -12,6 +12,10 @@ export default function Login() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (!email.trim() || !password) {
+      setError('Заполните email и пароль');
+      return;
+    }
     const result = login(email, password);
     if (!result.ok) {
       setError(result.error);
@@ -22,7 +26,7 @@ export default function Login() {
 
   return (
     <AuthLayout firstStepLabel="Войди в свой аккаунт">
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <form className="auth-form" onSubmit={handleSubmit} noValidate>
         <p className="auth-form-eyebrow">Solution Center</p>
         <h2>Войти</h2>
         <p className="auth-form-lead">Введите свои персональные данные для входа в систему.</p>
@@ -37,7 +41,6 @@ export default function Login() {
             placeholder="ivan.sokolov@company.local"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
         </div>
 
@@ -49,7 +52,6 @@ export default function Login() {
             placeholder="Введите свой пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
         </div>
 
