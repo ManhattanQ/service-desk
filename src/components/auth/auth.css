@@ -1,0 +1,231 @@
+.auth-shell {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  background: var(--bg);
+}
+
+@media (max-width: 900px) {
+  .auth-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+.auth-hero {
+  position: relative;
+  overflow: hidden;
+  background: #060309;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .auth-hero {
+    display: none;
+  }
+}
+
+.auth-hero-glow {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.9), transparent 32%),
+    radial-gradient(circle at 30% 30%, var(--accent) 0%, transparent 55%),
+    radial-gradient(circle at 55% 15%, var(--accent-dark) 0%, transparent 60%);
+  filter: blur(2px);
+}
+
+.auth-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+  text-align: center;
+  color: #fff;
+}
+
+.auth-hero-brand {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 16px;
+}
+
+.auth-hero-content h1 {
+  font-size: 40px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  letter-spacing: -0.5px;
+}
+
+.auth-hero-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 150%;
+  margin-bottom: 32px;
+}
+
+.auth-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.auth-steps li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 15px;
+}
+
+.auth-steps li.active {
+  background: #fff;
+  color: #0a0a0a;
+  font-weight: 500;
+}
+
+.auth-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.auth-steps li.active .auth-step-num {
+  background: #0a0a0a;
+  color: #fff;
+}
+
+.auth-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 380px;
+}
+
+.auth-form-eyebrow {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+.auth-form h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--text-h);
+}
+
+.auth-form-lead {
+  color: var(--text-muted);
+  line-height: 145%;
+  margin-bottom: 28px;
+}
+
+.auth-error {
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  color: #fca5a5;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.auth-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.auth-field {
+  margin-bottom: 18px;
+}
+
+.auth-field label {
+  display: block;
+  font-size: 14px;
+  color: var(--text-h);
+  margin-bottom: 8px;
+}
+
+.auth-field input,
+.auth-field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--field-bg);
+  color: var(--text-h);
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.auth-field input::placeholder {
+  color: var(--text-muted);
+}
+
+.auth-field input:focus,
+.auth-field select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.auth-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.auth-submit {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: var(--text-h);
+  color: var(--bg);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.auth-submit:hover {
+  opacity: 0.9;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 24px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.auth-switch a {
+  color: var(--text-h);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
