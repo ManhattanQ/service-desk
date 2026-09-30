@@ -13,6 +13,11 @@
 
 .auth-hero-wrap {
   padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
 }
 
 @media (max-width: 900px) {
@@ -26,8 +31,9 @@
   overflow: hidden;
   background: #060309;
   border-radius: 32px;
-  height: 100%;
-  min-height: 560px;
+  width: 100%;
+  max-height: 100%;
+  aspect-ratio: 1108 / 1056;
   padding: 40px;
   display: flex;
   align-items: center;
