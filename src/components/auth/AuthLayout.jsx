@@ -1,4 +1,5 @@
 import './auth.css';
+import heroBg from '../../assets/auth/hero-bg.webp';
 
 const STEPS = ['Зарегистрируйте свой аккаунт', 'Выберите должность', 'Настройте свой профиль'];
 
@@ -6,8 +7,7 @@ export default function AuthLayout({ children }) {
   return (
     <div className="auth-page">
       <div className="auth-hero-wrap">
-        <aside className="auth-hero">
-          <div className="auth-hero-glow" />
+        <aside className="auth-hero" style={{ backgroundImage: `url(${heroBg})` }}>
           <div className="auth-hero-content">
             <p className="auth-hero-brand">Solution Center</p>
             <h1>Начни с нами</h1>
