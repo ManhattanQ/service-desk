@@ -36,12 +36,12 @@
 
 .auth-hero-glow {
   position: absolute;
-  inset: -20%;
+  inset: 0;
   background:
-    radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.9), transparent 32%),
-    radial-gradient(circle at 30% 30%, var(--accent) 0%, transparent 55%),
-    radial-gradient(circle at 55% 15%, var(--accent-dark) 0%, transparent 60%);
-  filter: blur(2px);
+    radial-gradient(ellipse 45% 38% at 10% 4%, rgba(255, 255, 255, 0.8), transparent 70%),
+    radial-gradient(ellipse 78% 62% at 42% 32%, #9333ea 0%, transparent 68%),
+    radial-gradient(ellipse 58% 45% at 42% 32%, #7c3aed 0%, transparent 62%);
+  filter: blur(4px);
 }
 
 .auth-hero::after {
