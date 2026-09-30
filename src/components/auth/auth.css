@@ -38,11 +38,12 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 77% 55% at 36% 18%, rgba(255, 255, 255, 0.85) 0%, transparent 70%),
-    radial-gradient(ellipse 104% 87% at 50% 47%, #6b21a8 0%, transparent 75%),
-    radial-gradient(ellipse 84% 65% at 50% 47%, #7e22ce 0%, transparent 70%),
-    radial-gradient(ellipse 68% 44% at 50% 47%, #9333ea 0%, transparent 65%),
-    radial-gradient(ellipse 118% 80% at 50% 69%, rgba(0, 0, 0, 0.85) 0%, transparent 75%);
+    radial-gradient(ellipse 77% 55% at 36% 18%, #ffffff 0%, transparent 70%),
+    radial-gradient(ellipse 104% 87% at 50% 47%, #9909dd 0%, transparent 75%),
+    radial-gradient(ellipse 84% 65% at 50% 47%, #8646ee 0%, transparent 70%),
+    radial-gradient(ellipse 68% 44% at 50% 47%, #3f0b93 0%, transparent 65%),
+    radial-gradient(ellipse 118% 80% at 50% 69%, #000000 0%, transparent 75%);
+  background-blend-mode: normal, screen, screen, screen, normal;
 }
 
 .auth-hero::after {
