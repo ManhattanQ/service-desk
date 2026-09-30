@@ -31,6 +31,9 @@
   position: relative;
   overflow: hidden;
   background-color: #060309;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 32px;
   width: 100%;
   max-height: 100%;
@@ -39,77 +42,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  container-type: inline-size;
-}
-
-.hero-blob {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-/* Rectangle 42442 — white highlight blur, x:-34 y:-98 w:858 h:581, blur 71.335px (of 1108 card width) */
-.hero-blob--rect {
-  left: -3.07%;
-  top: -9.28%;
-  width: 77.44%;
-  height: 55.02%;
-  background: #ffffff;
-  filter: blur(6.44cqw);
-  border-radius: 24px;
-}
-
-/* Ellipse 196 — x:-21 y:41.82 w:1149.92 h:913.09, blur 285.34px, screen blend */
-.hero-blob--e196 {
-  left: -1.9%;
-  top: 3.96%;
-  width: 103.79%;
-  height: 86.47%;
-  background: #9909dd;
-  filter: blur(25.75cqw);
-  mix-blend-mode: screen;
-}
-
-/* Ellipse 197 — x:90 y:154.52 w:927.35 h:687.67, blur 285.34px, screen blend */
-.hero-blob--e197 {
-  left: 8.12%;
-  top: 14.63%;
-  width: 83.7%;
-  height: 65.1%;
-  background: #8646ee;
-  filter: blur(25.75cqw);
-  mix-blend-mode: screen;
-}
-
-/* Ellipse 198 — x:180 y:268.66 w:747.59 h:459.4, blur 285.34px, screen blend */
-.hero-blob--e198 {
-  left: 16.25%;
-  top: 25.44%;
-  width: 67.47%;
-  height: 43.5%;
-  background: #3f0b93;
-  filter: blur(25.75cqw);
-  mix-blend-mode: screen;
-}
-
-/* Ellipse 199 — x:-98 y:305.76 w:1304 h:847.46, blur 313.87px, darkens the lower area */
-.hero-blob--e199 {
-  left: -8.84%;
-  top: 28.95%;
-  width: 117.69%;
-  height: 80.25%;
-  background: #000000;
-  filter: blur(28.33cqw);
-}
-
-.auth-hero-noise {
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  background-repeat: repeat;
-  opacity: 0.25;
-  mix-blend-mode: overlay;
-  pointer-events: none;
 }
 
 .auth-hero-content {
