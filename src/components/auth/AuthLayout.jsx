@@ -7,7 +7,7 @@ export default function AuthLayout({ firstStepLabel, children }) {
 
   return (
     <div className="auth-page">
-      <div className="auth-shell">
+      <div className="auth-hero-wrap">
         <aside className="auth-hero">
           <div className="auth-hero-glow" />
           <div className="auth-hero-content">
@@ -26,8 +26,8 @@ export default function AuthLayout({ firstStepLabel, children }) {
             </ol>
           </div>
         </aside>
-        <main className="auth-panel">{children}</main>
       </div>
+      <main className="auth-panel">{children}</main>
     </div>
   );
 }

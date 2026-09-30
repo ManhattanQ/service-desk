@@ -1,14 +1,14 @@
 :root {
-  --bg: #050409;
-  --text-h: #f5f4f7;
-  --text-muted: #9c98a8;
-  --border: #221f2c;
-  --field-bg: #131019;
+  --bg: #ffffff;
+  --text-h: #111111;
+  --text-muted: #6b6b6b;
+  --border: #e5e5e5;
+  --field-bg: #f5f5f5;
   --accent: #8b3bff;
   --accent-dark: #3b1266;
 
-  font: 16px/145% system-ui, 'Segoe UI', Roboto, sans-serif;
-  color-scheme: dark;
+  font: 16px/145% 'Montserrat', system-ui, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light;
   color: var(--text-h);
   background: var(--bg);
   font-synthesis: none;
