@@ -92,7 +92,8 @@ export default function Queue() {
         (t) =>
           t.number.toLowerCase().includes(q) ||
           t.author.toLowerCase().includes(q) ||
-          t.title.toLowerCase().includes(q),
+          t.title.toLowerCase().includes(q) ||
+          categoryLabel(t.category).toLowerCase().includes(q),
       );
     }
     if (sort.field) {
@@ -182,7 +183,7 @@ export default function Queue() {
       <div className="queue-searchbar">
         <SearchIcon />
         <input
-          placeholder="Поиск по номеру, автору, теме..."
+          placeholder="Поиск по номеру, автору, теме, категории..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
