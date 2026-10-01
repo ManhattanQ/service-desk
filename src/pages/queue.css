@@ -14,6 +14,18 @@
   margin-bottom: 16px;
   max-width: 600px;
   box-shadow: 0 6px 5px rgba(0, 0, 0, 0.14), 0 1px 9px rgba(0, 0, 0, 0.12), 0 3px 2.5px rgba(0, 0, 0, 0.2);
+  animation: snackbar-in 0.25s ease-out;
+}
+
+@keyframes snackbar-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .snackbar-icon {

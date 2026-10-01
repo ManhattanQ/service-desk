@@ -117,6 +117,12 @@ export default function Queue() {
     setSelected([]);
   }, [tab, search]);
 
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
   const [, forceTick] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => forceTick((n) => n + 1), 30000);
