@@ -19,18 +19,17 @@ function NavItem({ to, icon, label, badge }) {
 }
 
 function PriorityList({ title, dotColor, tickets }) {
-  const [expanded, setExpanded] = useState(false);
+  const [scrollable, setScrollable] = useState(false);
   if (tickets.length === 0) return null;
   const overflow = tickets.length - 3;
-  const visible = expanded ? tickets : tickets.slice(0, 3);
   return (
     <div className="sidebar-priority-group">
       <p className="sidebar-priority-title">
         <span className="priority-dot" style={{ background: dotColor }} />
         {title}
       </p>
-      <div className={`sidebar-priority-list${expanded ? ' expanded' : ''}`}>
-        {visible.map((t) => (
+      <div className={`sidebar-priority-list${scrollable ? ' scrollable' : ''}`}>
+        {tickets.map((t) => (
           <div key={t.id} className="sidebar-priority-card">
             <div className="sidebar-priority-card-top">
               <span className="sidebar-priority-number">{t.number}</span>
@@ -43,9 +42,9 @@ function PriorityList({ title, dotColor, tickets }) {
           </div>
         ))}
       </div>
-      {overflow > 0 && (
-        <button type="button" className="sidebar-priority-more" onClick={() => setExpanded((e) => !e)}>
-          {expanded ? 'Свернуть' : `+${overflow} ещё`}
+      {overflow > 0 && !scrollable && (
+        <button type="button" className="sidebar-priority-more" onClick={() => setScrollable(true)}>
+          +{overflow} ещё
         </button>
       )}
     </div>
