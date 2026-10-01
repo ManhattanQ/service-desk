@@ -183,6 +183,35 @@
   cursor: pointer;
 }
 
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-new {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.status-in_progress {
+  background: #e0edff;
+  color: #1d4ed8;
+}
+
+.status-on_hold {
+  background: #fff4e0;
+  color: #b45309;
+}
+
+.status-closed {
+  background: #e9f9ee;
+  color: #1a7f37;
+}
+
 .sla-pill {
   display: inline-block;
   padding: 3px 8px;

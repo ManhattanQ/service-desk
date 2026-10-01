@@ -3,9 +3,9 @@ import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import {
   TICKET_PRIORITIES,
-  TICKET_STATUSES,
   categoryLabel,
   departmentLabel,
+  statusLabel,
 } from '../data/constants';
 import { getSlaState, formatTimeLeft } from '../utils/sla';
 import { SearchIcon, CalendarIcon, CheckCircleIcon, CloseIcon } from '../components/icons/NavIcons';
@@ -58,7 +58,11 @@ export default function Queue() {
   }
 
   function handleAssign() {
-    selected.forEach((id) => updateTicket(id, { assigneeId: currentUser.id }));
+    selected.forEach((id) => {
+      const ticket = tickets.find((t) => t.id === id);
+      const statusUpdate = ticket?.status === 'new' ? { status: 'in_progress' } : {};
+      updateTicket(id, { assigneeId: currentUser.id, ...statusUpdate });
+    });
     setToast(`Назначено на вас: ${selected.length} заявок.`);
     setSelected([]);
   }
@@ -67,6 +71,20 @@ export default function Queue() {
     const count = selected.length;
     selected.forEach((id) => updateTicket(id, { status: 'closed', closedAt: new Date().toISOString() }));
     setToast(`Успешно закрыто заявок: ${count}.`);
+    setSelected([]);
+  }
+
+  function handleHold() {
+    const count = selected.length;
+    selected.forEach((id) => updateTicket(id, { status: 'on_hold' }));
+    setToast(`Поставлено на удержание: ${count}.`);
+    setSelected([]);
+  }
+
+  function handleResume() {
+    const count = selected.length;
+    selected.forEach((id) => updateTicket(id, { status: 'in_progress' }));
+    setToast(`Возобновлено в работе: ${count}.`);
     setSelected([]);
   }
 
@@ -143,7 +161,7 @@ export default function Queue() {
           <tbody>
             {filtered.map((t) => {
               const slaState = getSlaState(t);
-              const isDone = t.status === 'resolved' || t.status === 'closed';
+              const isDone = t.status === 'closed';
               const isOnHold = t.status === 'on_hold';
               return (
                 <tr
@@ -164,17 +182,7 @@ export default function Queue() {
                   <td>{formatDate(t.createdAt)}</td>
                   <td>{departmentLabel(t.department)}</td>
                   <td>
-                    <select
-                      className="queue-select"
-                      value={t.status}
-                      onChange={(e) => updateTicket(t.id, { status: e.target.value })}
-                    >
-                      {TICKET_STATUSES.map((s) => (
-                        <option key={s.value} value={s.value}>
-                          {s.label}
-                        </option>
-                      ))}
-                    </select>
+                    <span className={`status-badge status-${t.status}`}>{statusLabel(t.status)}</span>
                   </td>
                   <td>
                     <select
@@ -214,6 +222,12 @@ export default function Queue() {
         <div className="queue-actions">
           <button type="button" className="btn-primary" onClick={handleAssign}>
             Назначить
+          </button>
+          <button type="button" className="btn-outline" onClick={handleHold}>
+            НА УДЕРЖАНИЕ
+          </button>
+          <button type="button" className="btn-outline" onClick={handleResume}>
+            ВОЗОБНОВИТЬ
           </button>
           <button type="button" className="btn-outline" onClick={handleClose}>
             ЗАКРЫТЬ

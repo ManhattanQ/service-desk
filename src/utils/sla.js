@@ -1,6 +1,6 @@
 import { priorityInfo } from '../data/constants';
 
-const DONE_STATUSES = ['resolved', 'closed'];
+const DONE_STATUSES = ['closed'];
 
 export function computeDeadline(createdAt, priority) {
   const hours = priorityInfo(priority)?.slaHours ?? 24;

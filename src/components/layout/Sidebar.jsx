@@ -34,7 +34,7 @@ export default function Sidebar() {
   const { currentUser, logout } = useAuth();
   const { tickets } = useTickets();
 
-  const openTickets = tickets.filter((t) => !['resolved', 'closed'].includes(t.status));
+  const openTickets = tickets.filter((t) => t.status !== 'closed');
   const urgentCount = openTickets.filter((t) => t.priority === 'critical' || t.priority === 'high').length;
   const critical = openTickets.filter((t) => t.priority === 'critical');
   const high = openTickets.filter((t) => t.priority === 'high');

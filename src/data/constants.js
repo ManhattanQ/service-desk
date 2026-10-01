@@ -38,10 +38,8 @@ export const TICKET_PRIORITIES = [
 
 export const TICKET_STATUSES = [
   { value: 'new', label: 'Новая' },
-  { value: 'open', label: 'Открыта' },
   { value: 'in_progress', label: 'В работе' },
   { value: 'on_hold', label: 'На удержании' },
-  { value: 'resolved', label: 'Решено' },
   { value: 'closed', label: 'Закрыта' },
 ];
 
