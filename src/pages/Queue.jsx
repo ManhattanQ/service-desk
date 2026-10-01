@@ -163,11 +163,7 @@ export default function Queue() {
   }
 
   function handleAssign() {
-    selected.forEach((id) => {
-      const ticket = tickets.find((t) => t.id === id);
-      const statusUpdate = ticket?.status === 'new' ? { status: 'in_progress' } : {};
-      updateTicket(id, { assigneeId: currentUser.id, ...statusUpdate });
-    });
+    selected.forEach((id) => updateTicket(id, { assigneeId: currentUser.id, status: 'in_progress' }));
     setToast(`Взято в работу: ${selected.length} заявок.`);
     setSelected([]);
   }
@@ -328,7 +324,6 @@ export default function Queue() {
                     <input
                       type="checkbox"
                       checked={selected.includes(t.id)}
-                      disabled={isDone}
                       onChange={() => toggleRow(t.id)}
                     />
                   </td>
