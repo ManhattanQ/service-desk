@@ -83,21 +83,21 @@ export default function Queue() {
       const statusUpdate = ticket?.status === 'new' ? { status: 'in_progress' } : {};
       updateTicket(id, { assigneeId: currentUser.id, ...statusUpdate });
     });
-    setToast(`Назначено на вас: ${selected.length} заявок.`);
+    setToast(`Взято в работу: ${selected.length} заявок.`);
     setSelected([]);
   }
 
   function handleClose() {
     const count = selected.length;
     selected.forEach((id) => updateTicket(id, { status: 'closed', closedAt: new Date().toISOString() }));
-    setToast(`Успешно закрыто заявок: ${count}.`);
+    setToast(`Завершено заявок: ${count}.`);
     setSelected([]);
   }
 
   function handleHold() {
     const count = selected.length;
     selected.forEach((id) => updateTicket(id, { status: 'on_hold' }));
-    setToast(`Поставлено на удержание: ${count}.`);
+    setToast(`Переведено в ожидание ответа: ${count}.`);
     setSelected([]);
   }
 
@@ -248,16 +248,16 @@ export default function Queue() {
       {selected.length > 0 && (
         <div className="queue-actions">
           <button type="button" className="btn-primary" onClick={handleAssign}>
-            Назначить
+            Взять в работу
           </button>
           <button type="button" className="btn-outline" onClick={handleHold}>
-            НА УДЕРЖАНИЕ
+            ОЖИДАНИЕ ОТВЕТА
           </button>
           <button type="button" className="btn-outline" onClick={handleResume}>
             ВОЗОБНОВИТЬ
           </button>
           <button type="button" className="btn-outline" onClick={handleClose}>
-            ЗАКРЫТЬ
+            ЗАВЕРШИТЬ
           </button>
         </div>
       )}
