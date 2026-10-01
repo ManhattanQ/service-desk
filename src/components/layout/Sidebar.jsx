@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTickets } from '../../context/TicketsContext';
@@ -20,15 +20,22 @@ function NavItem({ to, icon, label, badge }) {
 
 function PriorityList({ title, dotColor, tickets }) {
   const [scrollable, setScrollable] = useState(false);
+  const listRef = useRef(null);
   if (tickets.length === 0) return null;
   const overflow = tickets.length - 3;
+
+  function collapse() {
+    setScrollable(false);
+    if (listRef.current) listRef.current.scrollTop = 0;
+  }
+
   return (
     <div className="sidebar-priority-group">
       <p className="sidebar-priority-title">
         <span className="priority-dot" style={{ background: dotColor }} />
         {title}
       </p>
-      <div className={`sidebar-priority-list${scrollable ? ' scrollable' : ''}`}>
+      <div ref={listRef} className={`sidebar-priority-list${scrollable ? ' scrollable' : ''}`}>
         {tickets.map((t) => (
           <div key={t.id} className="sidebar-priority-card">
             <div className="sidebar-priority-card-top">
@@ -42,9 +49,13 @@ function PriorityList({ title, dotColor, tickets }) {
           </div>
         ))}
       </div>
-      {overflow > 0 && !scrollable && (
-        <button type="button" className="sidebar-priority-more" onClick={() => setScrollable(true)}>
-          +{overflow} ещё
+      {overflow > 0 && (
+        <button
+          type="button"
+          className="sidebar-priority-more"
+          onClick={() => (scrollable ? collapse() : setScrollable(true))}
+        >
+          {scrollable ? 'Свернуть' : `+${overflow} ещё`}
         </button>
       )}
     </div>

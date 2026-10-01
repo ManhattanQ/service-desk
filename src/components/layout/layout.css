@@ -134,6 +134,11 @@
   gap: 6px;
   max-height: 300px;
   overflow: hidden;
+  scrollbar-width: none;
+}
+
+.sidebar-priority-list::-webkit-scrollbar {
+  display: none;
 }
 
 .sidebar-priority-list.scrollable {
