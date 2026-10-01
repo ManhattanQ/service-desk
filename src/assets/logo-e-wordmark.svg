@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" fill="none">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="400" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#b347f0"/>
+      <stop offset="55%" stop-color="#8646ee"/>
+      <stop offset="100%" stop-color="#3f0b93"/>
+    </linearGradient>
+  </defs>
+  <text
+    x="0" y="62"
+    font-family="Montserrat, Arial, Helvetica, sans-serif"
+    font-weight="700"
+    font-size="52"
+    fill="url(#g)"
+    letter-spacing="-1"
+  >Solution Center</text>
+</svg>
