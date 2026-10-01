@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="g" x1="4" y1="4" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#b347f0"/>
+      <stop offset="55%" stop-color="#8646ee"/>
+      <stop offset="100%" stop-color="#3f0b93"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="18" fill="url(#g)"/>
+  <text
+    x="32" y="34"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-family="Arial, Helvetica, sans-serif"
+    font-weight="800"
+    font-size="34"
+    fill="white"
+  >S</text>
+</svg>
