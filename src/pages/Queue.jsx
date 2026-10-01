@@ -29,6 +29,49 @@ function assigneeName(users, assigneeId) {
   return user ? `${user.firstName} ${user.lastName}` : '—';
 }
 
+const PRIORITY_RANK = { critical: 0, high: 1, medium: 2, low: 3 };
+const STATUS_RANK = { new: 0, in_progress: 1, on_hold: 2, closed: 3 };
+
+const SORT_COLUMNS = [
+  { field: 'number', label: 'Номер #' },
+  { field: 'author', label: 'Автор' },
+  { field: 'title', label: 'Название' },
+  { field: 'category', label: 'Категория' },
+  { field: 'createdAt', label: 'Дата создания' },
+  { field: 'department', label: 'Отдел' },
+  { field: 'assignee', label: 'Исполнитель' },
+  { field: 'status', label: 'Статус' },
+  { field: 'priority', label: 'Приоритет' },
+  { field: 'sla', label: 'Время до конца' },
+];
+
+function sortValue(t, field, users) {
+  switch (field) {
+    case 'number':
+      return t.number;
+    case 'author':
+      return t.author;
+    case 'title':
+      return t.title;
+    case 'category':
+      return categoryLabel(t.category);
+    case 'createdAt':
+      return new Date(t.createdAt).getTime();
+    case 'department':
+      return departmentLabel(t.department);
+    case 'assignee':
+      return assigneeName(users, t.assigneeId);
+    case 'status':
+      return STATUS_RANK[t.status] ?? 99;
+    case 'priority':
+      return PRIORITY_RANK[t.priority] ?? 99;
+    case 'sla':
+      return t.status === 'closed' || t.status === 'on_hold' ? Infinity : new Date(t.slaDeadline).getTime();
+    default:
+      return '';
+  }
+}
+
 export default function Queue() {
   const { currentUser, users } = useAuth();
   const { tickets, updateTicket } = useTickets();
@@ -36,6 +79,7 @@ export default function Queue() {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState([]);
   const [toast, setToast] = useState(null);
+  const [sort, setSort] = useState({ field: null, dir: 'asc' });
 
   const filtered = useMemo(() => {
     let list = tickets;
@@ -51,8 +95,20 @@ export default function Queue() {
           t.title.toLowerCase().includes(q),
       );
     }
+    if (sort.field) {
+      list = [...list].sort((a, b) => {
+        const va = sortValue(a, sort.field, users);
+        const vb = sortValue(b, sort.field, users);
+        const cmp = typeof va === 'string' ? va.localeCompare(vb, 'ru') : va - vb;
+        return sort.dir === 'asc' ? cmp : -cmp;
+      });
+    }
     return list;
-  }, [tickets, tab, search, currentUser.id]);
+  }, [tickets, tab, search, currentUser.id, sort, users]);
+
+  function handleSort(field) {
+    setSort((s) => (s.field === field ? { field, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { field, dir: 'asc' }));
+  }
 
   useEffect(() => {
     setSelected([]);
@@ -167,16 +223,18 @@ export default function Queue() {
                   onChange={toggleAll}
                 />
               </th>
-              <th>Номер #</th>
-              <th>Автор</th>
-              <th>Название</th>
-              <th>Категория</th>
-              <th>Дата создания</th>
-              <th>Отдел</th>
-              <th>Исполнитель</th>
-              <th>Статус</th>
-              <th>Приоритет</th>
-              <th>Время до конца</th>
+              {SORT_COLUMNS.map((col) => (
+                <th
+                  key={col.field}
+                  className="sortable-th"
+                  onClick={() => handleSort(col.field)}
+                >
+                  {col.label}
+                  <span className={`sort-arrow${sort.field === col.field ? ' active' : ''}`}>
+                    {sort.field === col.field ? (sort.dir === 'asc' ? '▲' : '▼') : '⇅'}
+                  </span>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>

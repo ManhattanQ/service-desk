@@ -158,6 +158,26 @@
   white-space: nowrap;
 }
 
+.sortable-th {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable-th:hover {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.sort-arrow {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.sort-arrow.active {
+  color: #862aee;
+}
+
 .queue-table td {
   padding: 14px 10px;
   font-size: 16px;
