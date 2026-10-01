@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import {
@@ -78,20 +78,20 @@ export default function Queue() {
   const [tab, setTab] = useState('all');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState([]);
-  const [toast, setToastState] = useState(null);
-  const [toastLeaving, setToastLeaving] = useState(false);
+  const [toasts, setToasts] = useState([]);
+  const toastIdRef = useRef(0);
   const [sort, setSort] = useState({ field: null, dir: 'asc' });
 
   function setToast(message) {
-    setToastState(message);
-    setToastLeaving(false);
+    const id = ++toastIdRef.current;
+    setToasts((list) => [...list, { id, message, leaving: false }]);
+    setTimeout(() => dismissToast(id), 4000);
   }
 
-  function dismissToast() {
-    setToastLeaving(true);
+  function dismissToast(id) {
+    setToasts((list) => list.map((t) => (t.id === id ? { ...t, leaving: true } : t)));
     setTimeout(() => {
-      setToastState(null);
-      setToastLeaving(false);
+      setToasts((list) => list.filter((t) => t.id !== id));
     }, 250);
   }
 
@@ -130,12 +130,6 @@ export default function Queue() {
   useEffect(() => {
     setSelected([]);
   }, [tab, search]);
-
-  useEffect(() => {
-    if (!toast) return;
-    const timer = setTimeout(() => dismissToast(), 4000);
-    return () => clearTimeout(timer);
-  }, [toast]);
 
   const [, forceTick] = useState(0);
   useEffect(() => {
@@ -189,16 +183,20 @@ export default function Queue() {
 
   return (
     <div className="queue-page">
-      {toast && (
-        <div className={`snackbar${toastLeaving ? ' leaving' : ''}`}>
-          <CheckCircleIcon className="snackbar-icon" />
-          <div>
-            <p className="snackbar-title">Solution Center</p>
-            <p className="snackbar-body">{toast}</p>
-          </div>
-          <button type="button" className="snackbar-close" onClick={dismissToast}>
-            <CloseIcon />
-          </button>
+      {toasts.length > 0 && (
+        <div className="snackbar-stack">
+          {toasts.map((t) => (
+            <div key={t.id} className={`snackbar${t.leaving ? ' leaving' : ''}`}>
+              <CheckCircleIcon className="snackbar-icon" />
+              <div>
+                <p className="snackbar-title">Solution Center</p>
+                <p className="snackbar-body">{t.message}</p>
+              </div>
+              <button type="button" className="snackbar-close" onClick={() => dismissToast(t.id)}>
+                <CloseIcon />
+              </button>
+            </div>
+          ))}
         </div>
       )}
 
