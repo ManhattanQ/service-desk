@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTickets } from '../../context/TicketsContext';
@@ -18,28 +19,35 @@ function NavItem({ to, icon, label, badge }) {
 }
 
 function PriorityList({ title, dotColor, tickets }) {
+  const [expanded, setExpanded] = useState(false);
   if (tickets.length === 0) return null;
-  const visible = tickets.slice(0, 3);
-  const overflow = tickets.length - visible.length;
+  const overflow = tickets.length - 3;
+  const visible = expanded ? tickets : tickets.slice(0, 3);
   return (
     <div className="sidebar-priority-group">
       <p className="sidebar-priority-title">
         <span className="priority-dot" style={{ background: dotColor }} />
         {title}
       </p>
-      {visible.map((t) => (
-        <div key={t.id} className="sidebar-priority-card">
-          <div className="sidebar-priority-card-top">
-            <span className="sidebar-priority-number">{t.number}</span>
-            <span className={`sidebar-sla-pill sla-${getSlaState(t)}`}>{formatTimeLeft(t)}</span>
+      <div className={`sidebar-priority-list${expanded ? ' expanded' : ''}`}>
+        {visible.map((t) => (
+          <div key={t.id} className="sidebar-priority-card">
+            <div className="sidebar-priority-card-top">
+              <span className="sidebar-priority-number">{t.number}</span>
+              <span className={`sidebar-sla-pill sla-${getSlaState(t)}`}>{formatTimeLeft(t)}</span>
+            </div>
+            <p className="sidebar-priority-card-title">{t.title}</p>
+            <p className="sidebar-priority-card-meta">
+              {t.author} · {departmentLabel(t.department)}
+            </p>
           </div>
-          <p className="sidebar-priority-card-title">{t.title}</p>
-          <p className="sidebar-priority-card-meta">
-            {t.author} · {departmentLabel(t.department)}
-          </p>
-        </div>
-      ))}
-      {overflow > 0 && <p className="sidebar-priority-more">+{overflow} ещё</p>}
+        ))}
+      </div>
+      {overflow > 0 && (
+        <button type="button" className="sidebar-priority-more" onClick={() => setExpanded((e) => !e)}>
+          {expanded ? 'Свернуть' : `+${overflow} ещё`}
+        </button>
+      )}
     </div>
   );
 }

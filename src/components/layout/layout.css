@@ -128,12 +128,24 @@
   flex-shrink: 0;
 }
 
+.sidebar-priority-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar-priority-list.expanded {
+  max-height: 220px;
+  overflow-y: auto;
+}
+
 .sidebar-priority-card {
   margin: 0 4px;
   padding: 8px 10px;
   border-radius: 10px;
   background: #f7f3fc;
   border: 1px solid #ece3f7;
+  flex-shrink: 0;
 }
 
 .sidebar-priority-card-top {
@@ -173,7 +185,17 @@
   margin: 0;
   padding: 2px 14px;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  font-weight: 600;
+  font-family: inherit;
+  color: #862aee;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar-priority-more:hover {
+  color: #3f0b93;
 }
 
 .sidebar-sla-pill {
