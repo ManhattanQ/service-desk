@@ -23,5 +23,10 @@ export function formatTimeLeft(ticket) {
   const totalMinutes = Math.floor(remainingMs / 60000);
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
+  if (hours >= 24) {
+    const days = Math.floor(hours / 24);
+    const remHours = hours % 24;
+    return `${days}д ${remHours}ч`;
+  }
   return `${String(hours).padStart(2, '0')}ч ${String(minutes).padStart(2, '0')}м`;
 }
