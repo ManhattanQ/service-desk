@@ -2,13 +2,16 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import {
+  TICKET_CATEGORIES,
   TICKET_PRIORITIES,
+  TICKET_STATUSES,
+  DEPARTMENTS,
   categoryLabel,
   departmentLabel,
   statusLabel,
 } from '../data/constants';
 import { getSlaState, formatTimeLeft, computeDeadline } from '../utils/sla';
-import { SearchIcon, CalendarIcon, CheckCircleIcon, CloseIcon } from '../components/icons/NavIcons';
+import { SearchIcon, CheckCircleIcon, CloseIcon } from '../components/icons/NavIcons';
 import './queue.css';
 
 const TABS = [
@@ -81,6 +84,11 @@ export default function Queue() {
   const [toasts, setToasts] = useState([]);
   const toastIdRef = useRef(0);
   const [sort, setSort] = useState({ field: null, dir: 'asc' });
+  const [filters, setFilters] = useState({ category: 'all', status: 'all', priority: 'all', department: 'all' });
+
+  function setFilter(key, value) {
+    setFilters((f) => ({ ...f, [key]: value }));
+  }
 
   function setToast(message) {
     const id = ++toastIdRef.current;
@@ -100,6 +108,10 @@ export default function Queue() {
     if (tab === 'mine') list = list.filter((t) => t.assigneeId === currentUser.id);
     if (tab === 'new') list = list.filter((t) => t.status === 'new');
     if (tab === 'urgent') list = list.filter((t) => t.priority === 'critical' || t.priority === 'high');
+    if (filters.category !== 'all') list = list.filter((t) => t.category === filters.category);
+    if (filters.status !== 'all') list = list.filter((t) => t.status === filters.status);
+    if (filters.priority !== 'all') list = list.filter((t) => t.priority === filters.priority);
+    if (filters.department !== 'all') list = list.filter((t) => t.department === filters.department);
     if (search.trim()) {
       const q = search.trim().toLowerCase();
       list = list.filter(
@@ -121,7 +133,7 @@ export default function Queue() {
       });
     }
     return list;
-  }, [tickets, tab, search, currentUser.id, sort, users]);
+  }, [tickets, tab, search, currentUser.id, sort, users, filters]);
 
   function handleSort(field) {
     setSort((s) => (s.field === field ? { field, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { field, dir: 'asc' }));
@@ -129,7 +141,7 @@ export default function Queue() {
 
   useEffect(() => {
     setSelected([]);
-  }, [tab, search]);
+  }, [tab, search, filters]);
 
   const [, forceTick] = useState(0);
   useEffect(() => {
@@ -226,10 +238,54 @@ export default function Queue() {
         </div>
         <div className="queue-toolbar-actions">
           <span className="queue-filter-label">Фильтр</span>
-          <button type="button" className="queue-date-btn">
-            <span>ДД.ММ.ГГГГ</span>
-            <CalendarIcon />
-          </button>
+          <select
+            className="queue-filter-select"
+            value={filters.category}
+            onChange={(e) => setFilter('category', e.target.value)}
+          >
+            <option value="all">Все категории</option>
+            {TICKET_CATEGORIES.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+          <select
+            className="queue-filter-select"
+            value={filters.status}
+            onChange={(e) => setFilter('status', e.target.value)}
+          >
+            <option value="all">Все статусы</option>
+            {TICKET_STATUSES.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
+            ))}
+          </select>
+          <select
+            className="queue-filter-select"
+            value={filters.priority}
+            onChange={(e) => setFilter('priority', e.target.value)}
+          >
+            <option value="all">Все приоритеты</option>
+            {TICKET_PRIORITIES.map((p) => (
+              <option key={p.value} value={p.value}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+          <select
+            className="queue-filter-select"
+            value={filters.department}
+            onChange={(e) => setFilter('department', e.target.value)}
+          >
+            <option value="all">Все отделы</option>
+            {DEPARTMENTS.map((d) => (
+              <option key={d.value} value={d.value}>
+                {d.label}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
