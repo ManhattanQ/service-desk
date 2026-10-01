@@ -105,24 +105,100 @@
 .sidebar-priority-group {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .sidebar-priority-title {
-  padding: 10px 12px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #111111;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: rgba(0, 0, 0, 0.55);
   margin: 0;
 }
 
-.sidebar-priority-item {
-  padding: 10px 12px;
-  font-size: 15px;
+.priority-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sidebar-priority-card {
+  margin: 0 4px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #f7f3fc;
+  border: 1px solid #ece3f7;
+}
+
+.sidebar-priority-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.sidebar-priority-number {
+  font-size: 13px;
+  font-weight: 700;
+  color: #3f0b93;
+}
+
+.sidebar-priority-card-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
   color: #111111;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.sidebar-priority-card-meta {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-priority-more {
+  margin: 0;
+  padding: 2px 14px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.sidebar-sla-pill {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 1px 7px;
+  border-radius: 8px;
+  border: 1px solid;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.sidebar-sla-pill.sla-ok {
+  border-color: #41ce65;
+  color: #41ce65;
+}
+
+.sidebar-sla-pill.sla-warning {
+  border-color: #ff7504;
+  color: #ff7504;
+}
+
+.sidebar-sla-pill.sla-overdue {
+  border-color: #f53b57;
+  color: #f53b57;
 }
 
 .sidebar-bottom {

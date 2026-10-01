@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTickets } from '../../context/TicketsContext';
 import { departmentLabel } from '../../data/constants';
+import { getSlaState, formatTimeLeft } from '../../utils/sla';
 import { DashboardIcon, QueueIcon, KanbanIcon, HelpIcon, SettingsIcon } from '../icons/NavIcons';
 import logoMark from '../../assets/layout/logo-mark.png';
 import './layout.css';
@@ -16,16 +17,29 @@ function NavItem({ to, icon, label, badge }) {
   );
 }
 
-function PriorityList({ title, tickets }) {
+function PriorityList({ title, dotColor, tickets }) {
   if (tickets.length === 0) return null;
+  const visible = tickets.slice(0, 3);
+  const overflow = tickets.length - visible.length;
   return (
     <div className="sidebar-priority-group">
-      <p className="sidebar-priority-title">{title}</p>
-      {tickets.slice(0, 3).map((t) => (
-        <div key={t.id} className="sidebar-priority-item">
-          {t.number} {t.author}; {t.title}; {departmentLabel(t.department)}
+      <p className="sidebar-priority-title">
+        <span className="priority-dot" style={{ background: dotColor }} />
+        {title}
+      </p>
+      {visible.map((t) => (
+        <div key={t.id} className="sidebar-priority-card">
+          <div className="sidebar-priority-card-top">
+            <span className="sidebar-priority-number">{t.number}</span>
+            <span className={`sidebar-sla-pill sla-${getSlaState(t)}`}>{formatTimeLeft(t)}</span>
+          </div>
+          <p className="sidebar-priority-card-title">{t.title}</p>
+          <p className="sidebar-priority-card-meta">
+            {t.author} · {departmentLabel(t.department)}
+          </p>
         </div>
       ))}
+      {overflow > 0 && <p className="sidebar-priority-more">+{overflow} ещё</p>}
     </div>
   );
 }
@@ -55,8 +69,8 @@ export default function Sidebar() {
 
         <div className="sidebar-divider" />
 
-        <PriorityList title="Критический приоритет" tickets={critical} />
-        <PriorityList title="Высокий приоритет" tickets={high} />
+        <PriorityList title="Критический приоритет" dotColor="#f53b57" tickets={critical} />
+        <PriorityList title="Высокий приоритет" dotColor="#ff7504" tickets={high} />
       </div>
 
       <div className="sidebar-bottom">
