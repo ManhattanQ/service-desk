@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTickets } from '../../context/TicketsContext';
 import { departmentLabel } from '../../data/constants';
 import { DashboardIcon, QueueIcon, KanbanIcon, HelpIcon, SettingsIcon } from '../icons/NavIcons';
+import logoMark from '../../assets/layout/logo-mark.png';
 import './layout.css';
 
 function NavItem({ to, icon, label, badge }) {
@@ -42,7 +43,7 @@ export default function Sidebar() {
     <aside className="sidebar">
       <div className="sidebar-top">
         <div className="sidebar-brand">
-          <span className="sidebar-logo" />
+          <img src={logoMark} alt="" className="sidebar-logo" />
           <span>Solution Center</span>
         </div>
 

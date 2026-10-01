@@ -1,7 +1,11 @@
 .app-layout {
   display: flex;
   min-height: 100vh;
-  background: #ffffff;
+  background:
+    radial-gradient(45% 55% at 100% 0%, rgba(232, 128, 210, 0.5), rgba(232, 128, 210, 0) 70%),
+    radial-gradient(50% 55% at 100% 100%, rgba(140, 90, 235, 0.38), rgba(140, 90, 235, 0) 70%),
+    radial-gradient(40% 45% at 0% 100%, rgba(167, 139, 250, 0.12), rgba(167, 139, 250, 0) 70%),
+    #ffffff;
 }
 
 .app-content {
@@ -25,6 +29,7 @@
   position: sticky;
   top: 12px;
   overflow-y: auto;
+  background: #ffffff;
 }
 
 .sidebar-top {
@@ -46,9 +51,8 @@
 .sidebar-logo {
   width: 24px;
   height: 24px;
-  border-radius: 7px;
-  background: linear-gradient(135deg, #b347f0, #8646ee 55%, #3f0b93);
   flex-shrink: 0;
+  object-fit: contain;
 }
 
 .sidebar-nav {
