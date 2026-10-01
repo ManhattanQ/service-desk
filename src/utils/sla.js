@@ -21,6 +21,7 @@ export function formatTimeLeft(ticket) {
   const remainingMs = new Date(ticket.slaDeadline).getTime() - Date.now();
   if (remainingMs <= 0) return 'Просрочено';
   const totalMinutes = Math.floor(remainingMs / 60000);
+  if (totalMinutes < 1) return '< 1 мин';
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
   if (hours >= 24) {
