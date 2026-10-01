@@ -24,8 +24,13 @@ function formatDate(iso) {
   return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${String(d.getFullYear()).slice(-2)} | ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
+function assigneeName(users, assigneeId) {
+  const user = users.find((u) => u.id === assigneeId);
+  return user ? `${user.firstName} ${user.lastName}` : '—';
+}
+
 export default function Queue() {
-  const { currentUser } = useAuth();
+  const { currentUser, users } = useAuth();
   const { tickets, updateTicket } = useTickets();
   const [tab, setTab] = useState('all');
   const [search, setSearch] = useState('');
@@ -153,6 +158,7 @@ export default function Queue() {
               <th>Категория</th>
               <th>Дата создания</th>
               <th>Отдел</th>
+              <th>Исполнитель</th>
               <th>Статус</th>
               <th>Приоритет</th>
               <th>Время до конца</th>
@@ -181,6 +187,7 @@ export default function Queue() {
                   <td>{categoryLabel(t.category)}</td>
                   <td>{formatDate(t.createdAt)}</td>
                   <td>{departmentLabel(t.department)}</td>
+                  <td>{assigneeName(users, t.assigneeId)}</td>
                   <td>
                     <span className={`status-badge status-${t.status}`}>{statusLabel(t.status)}</span>
                   </td>
@@ -209,7 +216,7 @@ export default function Queue() {
             })}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={10} className="queue-empty">
+                <td colSpan={11} className="queue-empty">
                   Заявок не найдено.
                 </td>
               </tr>
