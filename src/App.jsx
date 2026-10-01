@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Home from './pages/Home';
 import Queue from './pages/Queue';
 import ComingSoon from './pages/ComingSoon';
 import AppLayout from './components/layout/AppLayout';
@@ -13,23 +12,10 @@ function RequireAuth({ children }) {
   return children;
 }
 
-function RequireSpecialist({ children }) {
-  const { currentUser } = useAuth();
-  if (!currentUser) return <Navigate to="/login" replace />;
-  if (currentUser.role !== 'specialist') return <Navigate to="/" replace />;
-  return children;
-}
-
 function RedirectIfAuthed({ children }) {
   const { currentUser } = useAuth();
   if (currentUser) return <Navigate to="/" replace />;
   return children;
-}
-
-function HomeRedirect() {
-  const { currentUser } = useAuth();
-  if (currentUser.role === 'specialist') return <Navigate to="/queue" replace />;
-  return <Home />;
 }
 
 function App() {
@@ -51,20 +37,13 @@ function App() {
           </RedirectIfAuthed>
         }
       />
-      <Route
-        path="/"
-        element={
-          <RequireAuth>
-            <HomeRedirect />
-          </RequireAuth>
-        }
-      />
+      <Route path="/" element={<Navigate to="/queue" replace />} />
 
       <Route
         element={
-          <RequireSpecialist>
+          <RequireAuth>
             <AppLayout />
-          </RequireSpecialist>
+          </RequireAuth>
         }
       >
         <Route path="/dashboard" element={<ComingSoon title="Dashboard" />} />
