@@ -1,0 +1,166 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.app-content {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 32px;
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  margin: 12px;
+  padding: 24px 16px;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  height: calc(100vh - 24px);
+  position: sticky;
+  top: 12px;
+  overflow-y: auto;
+}
+
+.sidebar-top {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111111;
+  padding: 0 4px;
+}
+
+.sidebar-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #b347f0, #8646ee 55%, #3f0b93);
+  flex-shrink: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #111111;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.nav-item:hover {
+  background: #f7f3fc;
+}
+
+.nav-item.active {
+  background: #f3e9ff;
+  color: #3f0b93;
+  font-weight: 600;
+}
+
+.nav-item span:first-of-type {
+  flex: 1;
+}
+
+.nav-badge {
+  background: #dc2626;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+  flex: none !important;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: #e6e6e6;
+}
+
+.sidebar-priority-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-priority-title {
+  padding: 10px 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #111111;
+  margin: 0;
+}
+
+.sidebar-priority-item {
+  padding: 10px 12px;
+  font-size: 15px;
+  color: #111111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.sidebar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.sidebar-profile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-profile-text strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #121212;
+}
+
+.sidebar-profile-text small {
+  font-size: 12px;
+  font-weight: 300;
+  color: #444444;
+}

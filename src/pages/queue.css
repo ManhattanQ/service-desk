@@ -1,0 +1,248 @@
+.queue-page {
+  position: relative;
+  font-family: 'Montserrat', system-ui, sans-serif;
+}
+
+.snackbar {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #bcecc8;
+  border-radius: 4px;
+  padding: 12px 44px 12px 12px;
+  margin-bottom: 16px;
+  max-width: 600px;
+  box-shadow: 0 6px 5px rgba(0, 0, 0, 0.14), 0 1px 9px rgba(0, 0, 0, 0.12), 0 3px 2.5px rgba(0, 0, 0, 0.2);
+}
+
+.snackbar-icon {
+  color: #29993e;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.snackbar-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.snackbar-body {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.snackbar-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.6);
+  padding: 2px;
+}
+
+.queue-searchbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 950px;
+  padding: 9px 16px;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  color: #999;
+  margin-bottom: 24px;
+}
+
+.queue-searchbar input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 15px;
+  font-family: inherit;
+  color: #111;
+}
+
+.queue-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 16px;
+}
+
+.queue-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 1px solid #e4e4e4;
+  margin-bottom: 24px;
+}
+
+.queue-tabs {
+  display: flex;
+}
+
+.queue-tab {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 14px 24px 12px;
+  font-family: inherit;
+  font-size: 16px;
+  color: #111;
+  border-bottom: 2px solid transparent;
+}
+
+.queue-tab.active {
+  border-bottom-color: #862aee;
+  font-weight: 500;
+}
+
+.queue-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+
+.queue-filter-label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.queue-date-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  background: none;
+  padding: 6px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.55px;
+  text-transform: uppercase;
+  color: #111;
+  cursor: pointer;
+}
+
+.queue-table-card {
+  border: 1px solid #e6e6e6;
+  border-radius: 32px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.queue-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1100px;
+}
+
+.queue-table th {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.6);
+  padding: 12px 10px;
+  white-space: nowrap;
+}
+
+.queue-table td {
+  padding: 14px 10px;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.87);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+}
+
+.queue-table tr.row-selected td {
+  background: #f3e9ff;
+}
+
+.queue-table tr.row-muted td {
+  color: rgba(0, 0, 0, 0.32);
+}
+
+.queue-select {
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 15px;
+  color: inherit;
+  cursor: pointer;
+}
+
+.sla-pill {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 10px;
+  border: 1px solid;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.sla-ok {
+  border-color: #41ce65;
+  color: #41ce65;
+}
+
+.sla-warning {
+  border-color: #ff7504;
+  color: #ff7504;
+}
+
+.sla-overdue {
+  border-color: #f53b57;
+  color: #f53b57;
+}
+
+.sla-dash {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.queue-empty {
+  text-align: center;
+  color: #999;
+  padding: 32px 0 !important;
+}
+
+.queue-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-primary {
+  background: #f3e9ff;
+  color: #3f0b93;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-outline {
+  background: none;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 8px 20px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.55px;
+  color: #111;
+  cursor: pointer;
+}

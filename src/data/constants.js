@@ -18,3 +18,41 @@ export function roleForDepartment(departmentValue) {
 export function departmentLabel(value) {
   return DEPARTMENTS.find((d) => d.value === value)?.label ?? value;
 }
+
+export const TICKET_CATEGORIES = [
+  { value: 'access', label: 'Доступы' },
+  { value: 'computers', label: 'Компьютеры' },
+  { value: 'software', label: 'Программное обеспечение' },
+  { value: 'network_vpn', label: 'Сеть / VPN' },
+  { value: 'printers', label: 'Принтеры' },
+  { value: 'accounts', label: 'Учётные записи' },
+  { value: 'other', label: 'Другое' },
+];
+
+export const TICKET_PRIORITIES = [
+  { value: 'critical', label: 'Критический', slaHours: 2 },
+  { value: 'high', label: 'Высокий', slaHours: 8 },
+  { value: 'medium', label: 'Средний', slaHours: 24 },
+  { value: 'low', label: 'Низкий', slaHours: 72 },
+];
+
+export const TICKET_STATUSES = [
+  { value: 'new', label: 'Новая' },
+  { value: 'open', label: 'Открыта' },
+  { value: 'in_progress', label: 'В работе' },
+  { value: 'on_hold', label: 'На удержании' },
+  { value: 'resolved', label: 'Решено' },
+  { value: 'closed', label: 'Закрыта' },
+];
+
+export function categoryLabel(value) {
+  return TICKET_CATEGORIES.find((c) => c.value === value)?.label ?? value;
+}
+
+export function priorityInfo(value) {
+  return TICKET_PRIORITIES.find((p) => p.value === value);
+}
+
+export function statusLabel(value) {
+  return TICKET_STATUSES.find((s) => s.value === value)?.label ?? value;
+}
