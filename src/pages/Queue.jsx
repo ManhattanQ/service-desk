@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import {
@@ -7,7 +7,7 @@ import {
   departmentLabel,
   statusLabel,
 } from '../data/constants';
-import { getSlaState, formatTimeLeft } from '../utils/sla';
+import { getSlaState, formatTimeLeft, computeDeadline } from '../utils/sla';
 import { SearchIcon, CalendarIcon, CheckCircleIcon, CloseIcon } from '../components/icons/NavIcons';
 import './queue.css';
 
@@ -54,12 +54,27 @@ export default function Queue() {
     return list;
   }, [tickets, tab, search, currentUser.id]);
 
+  useEffect(() => {
+    setSelected([]);
+  }, [tab, search]);
+
+  const [, forceTick] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => forceTick((n) => n + 1), 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   function toggleRow(id) {
     setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
   }
 
+  const selectableIds = useMemo(
+    () => filtered.filter((t) => t.status !== 'closed').map((t) => t.id),
+    [filtered],
+  );
+
   function toggleAll() {
-    setSelected((s) => (s.length === filtered.length ? [] : filtered.map((t) => t.id)));
+    setSelected((s) => (s.length > 0 && s.length === selectableIds.length ? [] : selectableIds));
   }
 
   function handleAssign() {
@@ -148,7 +163,7 @@ export default function Queue() {
               <th>
                 <input
                   type="checkbox"
-                  checked={selected.length > 0 && selected.length === filtered.length}
+                  checked={selected.length > 0 && selected.length === selectableIds.length}
                   onChange={toggleAll}
                 />
               </th>
@@ -178,6 +193,7 @@ export default function Queue() {
                     <input
                       type="checkbox"
                       checked={selected.includes(t.id)}
+                      disabled={isDone}
                       onChange={() => toggleRow(t.id)}
                     />
                   </td>
@@ -195,7 +211,11 @@ export default function Queue() {
                     <select
                       className="queue-select"
                       value={t.priority}
-                      onChange={(e) => updateTicket(t.id, { priority: e.target.value })}
+                      disabled={isDone}
+                      onChange={(e) => {
+                        const priority = e.target.value;
+                        updateTicket(t.id, { priority, slaDeadline: computeDeadline(t.createdAt, priority) });
+                      }}
                     >
                       {TICKET_PRIORITIES.map((p) => (
                         <option key={p.value} value={p.value}>
