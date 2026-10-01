@@ -78,8 +78,22 @@ export default function Queue() {
   const [tab, setTab] = useState('all');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState([]);
-  const [toast, setToast] = useState(null);
+  const [toast, setToastState] = useState(null);
+  const [toastLeaving, setToastLeaving] = useState(false);
   const [sort, setSort] = useState({ field: null, dir: 'asc' });
+
+  function setToast(message) {
+    setToastState(message);
+    setToastLeaving(false);
+  }
+
+  function dismissToast() {
+    setToastLeaving(true);
+    setTimeout(() => {
+      setToastState(null);
+      setToastLeaving(false);
+    }, 250);
+  }
 
   const filtered = useMemo(() => {
     let list = tickets;
@@ -119,7 +133,7 @@ export default function Queue() {
 
   useEffect(() => {
     if (!toast) return;
-    const timer = setTimeout(() => setToast(null), 4000);
+    const timer = setTimeout(() => dismissToast(), 4000);
     return () => clearTimeout(timer);
   }, [toast]);
 
@@ -176,13 +190,13 @@ export default function Queue() {
   return (
     <div className="queue-page">
       {toast && (
-        <div className="snackbar">
+        <div className={`snackbar${toastLeaving ? ' leaving' : ''}`}>
           <CheckCircleIcon className="snackbar-icon" />
           <div>
             <p className="snackbar-title">Solution Center</p>
             <p className="snackbar-body">{toast}</p>
           </div>
-          <button type="button" className="snackbar-close" onClick={() => setToast(null)}>
+          <button type="button" className="snackbar-close" onClick={dismissToast}>
             <CloseIcon />
           </button>
         </div>
