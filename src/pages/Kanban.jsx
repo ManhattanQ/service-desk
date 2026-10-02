@@ -10,7 +10,7 @@ import {
   useDroppable,
 } from '@dnd-kit/core';
 import { useTickets } from '../context/TicketsContext';
-import { departmentLabel } from '../data/constants';
+import { categoryLabel, departmentLabel } from '../data/constants';
 import { SearchIcon } from '../components/icons/NavIcons';
 import './kanban.css';
 
@@ -78,7 +78,9 @@ export default function Kanban() {
       (t) =>
         t.number.toLowerCase().includes(q) ||
         t.author.toLowerCase().includes(q) ||
-        t.title.toLowerCase().includes(q),
+        t.title.toLowerCase().includes(q) ||
+        categoryLabel(t.category).toLowerCase().includes(q) ||
+        departmentLabel(t.department).toLowerCase().includes(q),
     );
   }, [tickets, search]);
 
