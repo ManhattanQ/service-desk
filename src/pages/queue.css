@@ -262,29 +262,8 @@
   background: transparent;
   font-family: inherit;
   font-size: 0.9375rem;
-  font-weight: 600;
   color: inherit;
   cursor: pointer;
-}
-
-.queue-select.priority-critical {
-  color: #f53b57;
-}
-
-.queue-select.priority-high {
-  color: #ff7504;
-}
-
-.queue-select.priority-medium {
-  color: #ca8a04;
-}
-
-.queue-select.priority-low {
-  color: #6b7280;
-}
-
-.queue-select:disabled {
-  color: rgba(0, 0, 0, 0.32) !important;
 }
 
 .status-badge {
