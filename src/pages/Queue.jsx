@@ -19,6 +19,7 @@ const TABS = [
   { value: 'mine', label: 'Мои заявки' },
   { value: 'new', label: 'Новые заявки' },
   { value: 'urgent', label: 'Заявки высокого приоритета' },
+  { value: 'closed', label: 'Выполненные' },
 ];
 
 function formatDate(iso) {
@@ -111,9 +112,14 @@ export default function Queue() {
 
   const filtered = useMemo(() => {
     let list = tickets;
-    if (tab === 'mine') list = list.filter((t) => t.assigneeId === currentUser.id);
-    if (tab === 'new') list = list.filter((t) => t.status === 'new');
-    if (tab === 'urgent') list = list.filter((t) => t.priority === 'critical' || t.priority === 'high');
+    if (tab === 'closed') {
+      list = list.filter((t) => t.status === 'closed');
+    } else {
+      list = list.filter((t) => t.status !== 'closed');
+      if (tab === 'mine') list = list.filter((t) => t.assigneeId === currentUser.id);
+      if (tab === 'new') list = list.filter((t) => t.status === 'new');
+      if (tab === 'urgent') list = list.filter((t) => t.priority === 'critical' || t.priority === 'high');
+    }
     if (filters.category !== 'all') list = list.filter((t) => t.category === filters.category);
     if (filters.status !== 'all') list = list.filter((t) => t.status === filters.status);
     if (filters.priority !== 'all') list = list.filter((t) => t.priority === filters.priority);
@@ -164,11 +170,15 @@ export default function Queue() {
     [filtered],
   );
 
-  const canResume = useMemo(() => {
-    if (selected.length === 0) return false;
-    const selectedTickets = tickets.filter((t) => selected.includes(t.id));
-    return selectedTickets.every((t) => t.status === 'on_hold');
-  }, [selected, tickets]);
+  const selectedTickets = useMemo(
+    () => tickets.filter((t) => selected.includes(t.id)),
+    [selected, tickets],
+  );
+
+  const canAssign =
+    selectedTickets.length > 0 && selectedTickets.every((t) => t.status === 'new' || t.status === 'on_hold');
+  const canResume = selectedTickets.length > 0 && selectedTickets.every((t) => t.status === 'on_hold');
+  const canClose = selectedTickets.length > 0 && selectedTickets.every((t) => t.status !== 'closed');
 
   function toggleAll() {
     setSelected((s) => (s.length > 0 && s.length === selectableIds.length ? [] : selectableIds));
@@ -257,7 +267,7 @@ export default function Queue() {
             onChange={(e) => setFilter('status', e.target.value)}
           >
             <option value="all">Все статусы</option>
-            {TICKET_STATUSES.map((s) => (
+            {TICKET_STATUSES.filter((s) => s.value !== 'closed').map((s) => (
               <option key={s.value} value={s.value}>
                 {s.label}
               </option>
@@ -390,19 +400,23 @@ export default function Queue() {
         </table>
       </div>
 
-      {selected.length > 0 && (
+      {(canAssign || canResume || canClose) && (
         <div className="queue-actions">
-          <button type="button" className="btn-primary" onClick={handleAssign}>
-            Взять в работу
-          </button>
+          {canAssign && (
+            <button type="button" className="btn-primary" onClick={handleAssign}>
+              Взять в работу
+            </button>
+          )}
           {canResume && (
             <button type="button" className="btn-pill btn-neutral" onClick={handleResume}>
               Возобновить
             </button>
           )}
-          <button type="button" className="btn-pill btn-neutral" onClick={handleClose}>
-            Завершить
-          </button>
+          {canClose && (
+            <button type="button" className="btn-pill btn-neutral" onClick={handleClose}>
+              Завершить
+            </button>
+          )}
         </div>
       )}
     </div>
