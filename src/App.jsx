@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 import Queue from './pages/Queue';
 import Kanban from './pages/Kanban';
 import ComingSoon from './pages/ComingSoon';
@@ -47,7 +48,7 @@ function App() {
           </RequireAuth>
         }
       >
-        <Route path="/dashboard" element={<ComingSoon title="Dashboard" />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/queue" element={<Queue />} />
         <Route path="/kanban" element={<Kanban />} />
         <Route path="/help" element={<ComingSoon title="Помощь" />} />

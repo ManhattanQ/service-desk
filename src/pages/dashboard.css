@@ -1,0 +1,95 @@
+.dashboard-page {
+  font-family: 'Montserrat', system-ui, sans-serif;
+}
+
+.dashboard-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111111;
+  margin: 0 0 24px;
+}
+
+.dashboard-tiles {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.dashboard-tile {
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.dashboard-tile-value {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.dashboard-tile-label {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0;
+}
+
+.dashboard-subtitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111111;
+  margin: 0 0 16px;
+}
+
+.dashboard-workload {
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 24px;
+  padding: 8px 24px;
+  max-width: 700px;
+}
+
+.workload-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.workload-row:last-child {
+  border-bottom: none;
+}
+
+.workload-name {
+  width: 170px;
+  flex-shrink: 0;
+  font-size: 15px;
+  color: #111111;
+}
+
+.workload-bar-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: #f3e9ff;
+  overflow: hidden;
+}
+
+.workload-bar-fill {
+  height: 100%;
+  background: #862aee;
+  border-radius: 4px;
+}
+
+.workload-count {
+  width: 24px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 600;
+  color: #3f0b93;
+}
+
+.workload-empty {
+  color: #999999;
+  font-size: 14px;
+}
