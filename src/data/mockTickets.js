@@ -3,6 +3,11 @@ import { statusLabel } from './constants';
 
 const hoursAgo = (h) => new Date(Date.now() - h * 60 * 60 * 1000).toISOString();
 
+const USERS_BY_ID = {
+  s1: { firstName: 'Алексей', lastName: 'Ковалёв' },
+  s2: { firstName: 'Ольга', lastName: 'Смирнова' },
+};
+
 const RAW = [
   {
     number: '#01',
@@ -17,6 +22,7 @@ const RAW = [
     status: 'in_progress',
     priority: 'high',
     createdHoursAgo: 0.5,
+    assigneeId: 's1',
   },
   {
     number: '#02',
@@ -69,6 +75,7 @@ const RAW = [
     status: 'in_progress',
     priority: 'low',
     createdHoursAgo: 1,
+    assigneeId: 's2',
   },
   {
     number: '#06',
@@ -82,6 +89,7 @@ const RAW = [
     status: 'in_progress',
     priority: 'high',
     createdHoursAgo: 1.5,
+    assigneeId: 's1',
   },
   {
     number: '#07',
@@ -95,6 +103,7 @@ const RAW = [
     status: 'in_progress',
     priority: 'low',
     createdHoursAgo: 5,
+    assigneeId: 's2',
   },
   {
     number: '#08',
@@ -108,6 +117,7 @@ const RAW = [
     status: 'in_progress',
     priority: 'high',
     createdHoursAgo: 8.5,
+    assigneeId: 's1',
   },
   {
     number: '#09',
@@ -121,6 +131,7 @@ const RAW = [
     status: 'in_progress',
     priority: 'critical',
     createdHoursAgo: 3,
+    assigneeId: 's2',
   },
   {
     number: '#13',
@@ -134,6 +145,7 @@ const RAW = [
     status: 'closed',
     priority: 'low',
     createdHoursAgo: 10,
+    assigneeId: 's2',
   },
   {
     number: '#10',
@@ -147,6 +159,7 @@ const RAW = [
     status: 'on_hold',
     priority: 'medium',
     createdHoursAgo: 5,
+    assigneeId: 's1',
   },
 ];
 
@@ -163,6 +176,15 @@ function buildHistory(t, id, createdAt) {
       message: `статус изменён: Новая → ${statusLabel('in_progress')}`,
       createdAt: inProgressAt,
     });
+    if (t.assigneeId) {
+      const assignee = USERS_BY_ID[t.assigneeId];
+      entries.push({
+        id: `${id}-h2a`,
+        type: 'assigned',
+        message: `${assignee.firstName} ${assignee.lastName} назначен(а) исполнителем`,
+        createdAt: inProgressAt,
+      });
+    }
   }
   if (t.status === 'on_hold') {
     entries.push({
@@ -199,7 +221,7 @@ export const SEED_TICKETS = RAW.map((t, i) => {
     department: t.department,
     status: t.status,
     priority: t.priority,
-    assigneeId: null,
+    assigneeId: t.assigneeId ?? null,
     createdAt,
     closedAt,
     slaDeadline: computeDeadline(createdAt, t.priority),

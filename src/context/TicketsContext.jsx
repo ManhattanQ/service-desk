@@ -4,7 +4,7 @@ import { SEED_TICKETS } from '../data/mockTickets';
 const STORAGE_KEY = 'sd_tickets';
 // Bump whenever the ticket schema (status/priority values, required fields) changes,
 // so browsers with an older cached shape fall back to the fresh seed instead of breaking.
-const STORAGE_VERSION = 5;
+const STORAGE_VERSION = 6;
 const TicketsContext = createContext(null);
 
 function loadTickets() {
