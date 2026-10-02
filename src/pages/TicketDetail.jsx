@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Paperclip, X, FileText } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import {
@@ -34,6 +34,26 @@ function initials(name) {
   return parts[0] ? parts[0].slice(0, 2).toUpperCase() : '';
 }
 
+function AttachmentList({ items }) {
+  if (!items || items.length === 0) return null;
+  return (
+    <div className="td-attachments">
+      {items.map((a) => (
+        <a key={a.id} className="td-attachment" href={a.url} target="_blank" rel="noreferrer">
+          {a.type?.startsWith('image/') ? (
+            <img src={a.url} alt={a.name} className="td-attachment-img" />
+          ) : (
+            <div className="td-attachment-file">
+              <FileText size={28} strokeWidth={1.5} />
+            </div>
+          )}
+          <span className="td-attachment-caption">{a.name}</span>
+        </a>
+      ))}
+    </div>
+  );
+}
+
 function Panel({ title, open, onToggle, children }) {
   return (
     <div className="td-panel">
@@ -59,8 +79,32 @@ export default function TicketDetail() {
   const [infoOpen, setInfoOpen] = useState(true);
   const [replyMode, setReplyMode] = useState(null);
   const [replyText, setReplyText] = useState('');
+  const [pendingFiles, setPendingFiles] = useState([]);
   const [assignOpen, setAssignOpen] = useState(false);
   const assignRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+  function handleFileSelect(e) {
+    const files = Array.from(e.target.files ?? []);
+    const next = files.map((file) => ({
+      id: `a${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      name: file.name,
+      type: file.type,
+      url: URL.createObjectURL(file),
+    }));
+    setPendingFiles((prev) => [...prev, ...next]);
+    e.target.value = '';
+  }
+
+  function removePendingFile(id) {
+    setPendingFiles((prev) => prev.filter((f) => f.id !== id));
+  }
+
+  function toggleReplyMode(mode) {
+    setReplyMode((prev) => (prev === mode ? null : mode));
+    setReplyText('');
+    setPendingFiles([]);
+  }
 
   useEffect(() => {
     if (!assignOpen) return;
@@ -147,6 +191,7 @@ export default function TicketDetail() {
       body,
       internal: isNote,
       createdAt: new Date().toISOString(),
+      attachments: pendingFiles,
     };
     const historyMessage = isNote ? `${authorName} добавил(а) примечание: «${body}»` : `${authorName}: «${body}»`;
     let history = pushHistory(historyMessage, isNote ? 'note' : 'comment');
@@ -159,6 +204,7 @@ export default function TicketDetail() {
     updateTicket(ticket.id, changes);
     setReplyText('');
     setReplyMode(null);
+    setPendingFiles([]);
   }
 
   return (
@@ -211,6 +257,7 @@ export default function TicketDetail() {
             <div className="td-message-body">
               <p className="td-message-author">{ticket.author}</p>
               <p className="td-message-text">{ticket.description}</p>
+              <AttachmentList items={ticket.attachments} />
             </div>
           </div>
 
@@ -227,6 +274,7 @@ export default function TicketDetail() {
                       {c.internal && <span className="td-note-tag">примечание</span>}
                     </p>
                     <p className="td-message-text">{c.body}</p>
+                    <AttachmentList items={c.attachments} />
                   </div>
                 </div>
               ))}
@@ -243,7 +291,7 @@ export default function TicketDetail() {
                 <button
                   type="button"
                   className={`td-btn td-btn-primary${replyMode === 'reply' ? ' active' : ''}`}
-                  onClick={() => setReplyMode(replyMode === 'reply' ? null : 'reply')}
+                  onClick={() => toggleReplyMode('reply')}
                 >
                   Ответить
                 </button>
@@ -267,7 +315,7 @@ export default function TicketDetail() {
                 <button
                   type="button"
                   className={`td-btn td-btn-outline${replyMode === 'note' ? ' active' : ''}`}
-                  onClick={() => setReplyMode(replyMode === 'note' ? null : 'note')}
+                  onClick={() => toggleReplyMode('note')}
                 >
                   Добавить примечание
                 </button>
@@ -285,8 +333,44 @@ export default function TicketDetail() {
                 onChange={(e) => setReplyText(e.target.value)}
                 autoFocus
               />
+              {pendingFiles.length > 0 && (
+                <div className="td-pending-files">
+                  {pendingFiles.map((f) => (
+                    <span key={f.id} className="td-pending-file">
+                      {f.name}
+                      <button type="button" onClick={() => removePendingFile(f.id)} aria-label="Убрать файл">
+                        <X size={13} strokeWidth={2} />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
               <div className="td-reply-actions">
-                <button type="button" className="td-btn td-btn-outline" onClick={() => { setReplyMode(null); setReplyText(''); }}>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  className="td-file-input-hidden"
+                  onChange={handleFileSelect}
+                />
+                <button
+                  type="button"
+                  className="td-btn-attach"
+                  onClick={() => fileInputRef.current?.click()}
+                  title="Прикрепить файл"
+                >
+                  <Paperclip size={16} strokeWidth={1.8} />
+                </button>
+                <span className="td-reply-actions-spacer" />
+                <button
+                  type="button"
+                  className="td-btn td-btn-outline"
+                  onClick={() => {
+                    setReplyMode(null);
+                    setReplyText('');
+                    setPendingFiles([]);
+                  }}
+                >
                   Отмена
                 </button>
                 <button type="button" className="td-btn td-btn-primary" onClick={submitReply} disabled={!replyText.trim()}>
