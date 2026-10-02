@@ -11,7 +11,7 @@ import {
   statusLabel,
 } from '../data/constants';
 import { getSlaState, formatTimeLeft, computeDeadline } from '../utils/sla';
-import { Search, CheckCircle2, X } from 'lucide-react';
+import { Search, CheckCircle2, X, RotateCcw } from 'lucide-react';
 import './queue.css';
 
 const TABS = [
@@ -89,6 +89,12 @@ export default function Queue() {
   function setFilter(key, value) {
     setFilters((f) => ({ ...f, [key]: value }));
   }
+
+  function resetFilters() {
+    setFilters({ category: 'all', status: 'all', priority: 'all', department: 'all' });
+  }
+
+  const hasActiveFilters = Object.values(filters).some((v) => v !== 'all');
 
   function setToast(message) {
     const id = ++toastIdRef.current;
@@ -282,6 +288,16 @@ export default function Queue() {
               </option>
             ))}
           </select>
+          {hasActiveFilters && (
+            <button
+              type="button"
+              className="queue-filter-reset"
+              onClick={resetFilters}
+              title="Сбросить фильтры"
+            >
+              <RotateCcw size={15} strokeWidth={1.8} />
+            </button>
+          )}
         </div>
       </div>
 
