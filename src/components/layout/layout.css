@@ -296,7 +296,7 @@
   right: 0;
   bottom: calc(100% + 0.5rem);
   background: #ffffff;
-  border: 1px solid #f3d6db;
+  border: 1px solid #e6e6e6;
   border-radius: 0.75rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   padding: 0.375rem;
@@ -315,13 +315,29 @@
   font-family: inherit;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #dc2626;
+  color: #111111;
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
 .sidebar-profile-menu-item:hover {
+  background: #f7f3fc;
+}
+
+.sidebar-profile-menu-item.danger {
+  color: #dc2626;
+}
+
+.sidebar-profile-menu-item.danger:hover {
   background: #fdecee;
+}
+
+.sidebar-profile-menu-divider {
+  height: 1px;
+  background: #e6e6e6;
+  margin: 0.25rem 0.125rem;
 }
 
 .sidebar-avatar {

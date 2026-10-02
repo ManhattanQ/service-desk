@@ -114,13 +114,19 @@ export default function Sidebar() {
       </div>
 
       <div className="sidebar-bottom">
-        <NavItem to="/help" icon={<HelpCircle size={20} strokeWidth={1.8} />} label="Помощь" />
-        <NavItem to="/settings" icon={<Settings size={20} strokeWidth={1.8} />} label="Настройки" />
-        <div className="sidebar-divider" />
         <div className="sidebar-profile-wrap" ref={menuRef}>
           {menuOpen && (
             <div className="sidebar-profile-menu">
-              <button type="button" className="sidebar-profile-menu-item" onClick={logout}>
+              <Link to="/help" className="sidebar-profile-menu-item" onClick={() => setMenuOpen(false)}>
+                <HelpCircle size={16} strokeWidth={1.8} />
+                Помощь
+              </Link>
+              <Link to="/settings" className="sidebar-profile-menu-item" onClick={() => setMenuOpen(false)}>
+                <Settings size={16} strokeWidth={1.8} />
+                Настройки
+              </Link>
+              <div className="sidebar-profile-menu-divider" />
+              <button type="button" className="sidebar-profile-menu-item danger" onClick={logout}>
                 <LogOut size={16} strokeWidth={1.8} />
                 Выйти
               </button>
