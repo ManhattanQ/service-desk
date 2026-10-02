@@ -10,6 +10,7 @@ import {
   useDroppable,
 } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
@@ -68,6 +69,7 @@ function CardContent({ ticket }) {
 }
 
 function KanbanCard({ ticket }) {
+  const navigate = useNavigate();
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: ticket.id });
   return (
     <div
@@ -75,6 +77,7 @@ function KanbanCard({ ticket }) {
       {...listeners}
       {...attributes}
       className={`kanban-card${isDragging ? ' placeholder' : ''}`}
+      onClick={() => navigate(`/queue/${ticket.id}`)}
     >
       <CardContent ticket={ticket} />
     </div>

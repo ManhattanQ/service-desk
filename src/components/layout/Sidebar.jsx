@@ -28,7 +28,7 @@ function PriorityList({ title, tickets }) {
       <p className="sidebar-priority-title">{title}</p>
       <div className="sidebar-priority-list">
         {tickets.map((t) => (
-          <div key={t.id} className="sidebar-priority-card">
+          <Link key={t.id} to={`/queue/${t.id}`} className="sidebar-priority-card">
             <div className="sidebar-priority-card-top">
               <span className="sidebar-priority-number">
                 <span className="priority-dot" style={{ background: PRIORITY_DOT_COLOR[t.priority] }} />
@@ -44,7 +44,7 @@ function PriorityList({ title, tickets }) {
             <p className="sidebar-priority-card-meta">
               {t.author} · {departmentLabel(t.department)}
             </p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

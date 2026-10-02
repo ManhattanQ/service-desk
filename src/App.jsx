@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Queue from './pages/Queue';
 import Kanban from './pages/Kanban';
+import TicketDetail from './pages/TicketDetail';
 import ComingSoon from './pages/ComingSoon';
 import AppLayout from './components/layout/AppLayout';
 
@@ -50,6 +51,7 @@ function App() {
       >
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/queue" element={<Queue />} />
+        <Route path="/queue/:id" element={<TicketDetail />} />
         <Route path="/kanban" element={<Kanban />} />
         <Route path="/help" element={<ComingSoon title="Помощь" />} />
         <Route path="/settings" element={<ComingSoon title="Настройки" />} />

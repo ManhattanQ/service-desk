@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import {
@@ -77,6 +78,7 @@ function sortValue(t, field, users) {
 }
 
 export default function Queue() {
+  const navigate = useNavigate();
   const { currentUser, users } = useAuth();
   const { tickets, updateTicket } = useTickets();
   const [tab, setTab] = useState('all');
@@ -363,9 +365,10 @@ export default function Queue() {
               return (
                 <tr
                   key={t.id}
-                  className={`${selected.includes(t.id) ? 'row-selected' : ''} ${isDone ? 'row-muted' : ''}`}
+                  className={`queue-row-clickable ${selected.includes(t.id) ? 'row-selected' : ''} ${isDone ? 'row-muted' : ''}`}
+                  onClick={() => navigate(`/queue/${t.id}`)}
                 >
-                  <td>
+                  <td onClick={(e) => e.stopPropagation()}>
                     <input
                       type="checkbox"
                       checked={selected.includes(t.id)}
@@ -382,7 +385,7 @@ export default function Queue() {
                   <td>
                     <span className={`status-badge status-${t.status}`}>{statusLabel(t.status)}</span>
                   </td>
-                  <td>
+                  <td onClick={(e) => e.stopPropagation()}>
                     <select
                       className="queue-select"
                       value={t.priority}

@@ -258,6 +258,14 @@
   white-space: nowrap;
 }
 
+.queue-table tr.queue-row-clickable {
+  cursor: pointer;
+}
+
+.queue-table tr.queue-row-clickable:hover td {
+  background: #faf7fe;
+}
+
 .queue-table tr.row-selected td {
   background: #f3e9ff;
 }
