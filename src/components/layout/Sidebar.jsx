@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { HelpCircle, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTickets } from '../../context/TicketsContext';
 import { departmentLabel } from '../../data/constants';
 import { getSlaState, formatTimeLeft } from '../../utils/sla';
-import { DashboardIcon, QueueIcon, KanbanIcon, HelpIcon, SettingsIcon, LogoutIcon } from '../icons/NavIcons';
+import { DashboardIcon, QueueIcon, KanbanIcon, LogoutIcon } from '../icons/NavIcons';
 import logoMark from '../../assets/layout/logo-mark.png';
 import './layout.css';
 
@@ -114,8 +115,8 @@ export default function Sidebar() {
       </div>
 
       <div className="sidebar-bottom">
-        <NavItem to="/help" icon={<HelpIcon />} label="Помощь" />
-        <NavItem to="/settings" icon={<SettingsIcon />} label="Настройки" />
+        <NavItem to="/help" icon={<HelpCircle size={20} strokeWidth={1.8} />} label="Помощь" />
+        <NavItem to="/settings" icon={<Settings size={20} strokeWidth={1.8} />} label="Настройки" />
         <div className="sidebar-divider" />
         <div className="sidebar-profile-wrap" ref={menuRef}>
           {menuOpen && (
