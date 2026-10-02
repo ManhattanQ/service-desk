@@ -240,16 +240,60 @@
   gap: 4px;
 }
 
+.sidebar-profile-wrap {
+  position: relative;
+}
+
 .sidebar-profile {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 8px 4px;
+  width: 100%;
   background: none;
   border: none;
+  border-radius: 10px;
   cursor: pointer;
   text-align: left;
   font-family: inherit;
+}
+
+.sidebar-profile:hover {
+  background: #f7f3fc;
+}
+
+.sidebar-profile-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 8px);
+  background: #ffffff;
+  border: 1px solid #f3d6db;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 6px;
+  z-index: 10;
+}
+
+.sidebar-profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 10px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: #dc2626;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sidebar-profile-menu-item:hover {
+  background: #fdecee;
 }
 
 .sidebar-avatar {

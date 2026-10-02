@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTickets } from '../../context/TicketsContext';
 import { departmentLabel } from '../../data/constants';
 import { getSlaState, formatTimeLeft } from '../../utils/sla';
-import { DashboardIcon, QueueIcon, KanbanIcon, HelpIcon, SettingsIcon } from '../icons/NavIcons';
+import { DashboardIcon, QueueIcon, KanbanIcon, HelpIcon, SettingsIcon, LogoutIcon } from '../icons/NavIcons';
 import logoMark from '../../assets/layout/logo-mark.png';
 import './layout.css';
 
@@ -76,6 +76,18 @@ export default function Sidebar() {
     return () => clearInterval(interval);
   }, []);
 
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handleClick(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [menuOpen]);
+
   const openTickets = tickets.filter((t) => t.status !== 'closed');
   const urgentCount = openTickets.filter((t) => t.priority === 'critical' || t.priority === 'high').length;
   const critical = openTickets.filter((t) => t.priority === 'critical');
@@ -105,15 +117,29 @@ export default function Sidebar() {
         <NavItem to="/help" icon={<HelpIcon />} label="Помощь" />
         <NavItem to="/settings" icon={<SettingsIcon />} label="Настройки" />
         <div className="sidebar-divider" />
-        <button type="button" className="sidebar-profile" onClick={logout} title="Выйти">
-          <span className="sidebar-avatar" />
-          <span className="sidebar-profile-text">
-            <strong>
-              {currentUser.firstName} {currentUser.lastName}
-            </strong>
-            <small>{currentUser.role === 'specialist' ? 'Специалист поддержки' : departmentLabel(currentUser.department)}</small>
-          </span>
-        </button>
+        <div className="sidebar-profile-wrap" ref={menuRef}>
+          {menuOpen && (
+            <div className="sidebar-profile-menu">
+              <button type="button" className="sidebar-profile-menu-item" onClick={logout}>
+                <LogoutIcon />
+                Выйти
+              </button>
+            </div>
+          )}
+          <button
+            type="button"
+            className="sidebar-profile"
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <span className="sidebar-avatar" />
+            <span className="sidebar-profile-text">
+              <strong>
+                {currentUser.firstName} {currentUser.lastName}
+              </strong>
+              <small>{currentUser.role === 'specialist' ? 'Специалист поддержки' : departmentLabel(currentUser.department)}</small>
+            </span>
+          </button>
+        </div>
       </div>
     </aside>
   );
