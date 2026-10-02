@@ -5,7 +5,6 @@ const hoursAgo = (h) => new Date(Date.now() - h * 60 * 60 * 1000).toISOString();
 
 const USERS_BY_ID = {
   s1: { firstName: 'Алексей', lastName: 'Ковалёв' },
-  s2: { firstName: 'Ольга', lastName: 'Смирнова' },
 };
 
 const RAW = [
@@ -75,7 +74,7 @@ const RAW = [
     status: 'in_progress',
     priority: 'low',
     createdHoursAgo: 1,
-    assigneeId: 's2',
+    assigneeId: 's1',
   },
   {
     number: '#06',
@@ -103,7 +102,7 @@ const RAW = [
     status: 'in_progress',
     priority: 'low',
     createdHoursAgo: 5,
-    assigneeId: 's2',
+    assigneeId: 's1',
   },
   {
     number: '#08',
@@ -131,7 +130,7 @@ const RAW = [
     status: 'in_progress',
     priority: 'critical',
     createdHoursAgo: 3,
-    assigneeId: 's2',
+    assigneeId: 's1',
   },
   {
     number: '#13',
@@ -145,7 +144,7 @@ const RAW = [
     status: 'closed',
     priority: 'low',
     createdHoursAgo: 10,
-    assigneeId: 's2',
+    assigneeId: 's1',
   },
   {
     number: '#10',

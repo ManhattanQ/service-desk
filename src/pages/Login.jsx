@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../components/auth/AuthLayout';
 import { useAuth } from '../context/AuthContext';
 import { isValidEmail } from '../utils/validation';
+import { DEMO_ACCOUNTS } from '../data/mockUsers';
 
 export default function Login() {
   const { login } = useAuth();
@@ -27,6 +28,12 @@ export default function Login() {
       return;
     }
     navigate('/', { replace: true });
+  }
+
+  function fillDemoAccount(account) {
+    setEmail(account.email);
+    setPassword(account.password);
+    setError('');
   }
 
   return (
@@ -67,6 +74,25 @@ export default function Login() {
         <p className="auth-switch">
           Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
         </p>
+
+        <div className="auth-demo">
+          <p className="auth-demo-title">Демо-доступы</p>
+          {DEMO_ACCOUNTS.map((acc) => (
+            <div className="auth-demo-card" key={acc.email}>
+              <div className="auth-demo-card-info">
+                <p className="auth-demo-name">
+                  {acc.roleLabel} · {acc.name}
+                </p>
+                <p className="auth-demo-creds">
+                  {acc.email} · {acc.password}
+                </p>
+              </div>
+              <button type="button" className="auth-demo-insert" onClick={() => fillDemoAccount(acc)}>
+                Вставить
+              </button>
+            </div>
+          ))}
+        </div>
       </form>
     </AuthLayout>
   );

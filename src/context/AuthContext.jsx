@@ -4,14 +4,10 @@ import { roleForDepartment } from '../data/constants';
 
 const AuthContext = createContext(null);
 const SESSION_KEY = 'sd_session_user_id';
-// ВРЕМЕННО: автовход специалистом для удобства демонстрации, убрать перед финальной сдачей.
-const DEV_AUTO_LOGIN_ID = 's1';
 
 export function AuthProvider({ children }) {
   const [users, setUsers] = useState(() => loadUsers());
-  const [currentUserId, setCurrentUserId] = useState(
-    () => localStorage.getItem(SESSION_KEY) ?? DEV_AUTO_LOGIN_ID,
-  );
+  const [currentUserId, setCurrentUserId] = useState(() => localStorage.getItem(SESSION_KEY));
 
   const currentUser = users.find((u) => u.id === currentUserId) || null;
 

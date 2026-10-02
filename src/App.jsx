@@ -15,6 +15,12 @@ function RequireAuth({ children }) {
   return children;
 }
 
+function RequireSpecialist({ children }) {
+  const { currentUser } = useAuth();
+  if (currentUser.role !== 'specialist') return <Navigate to="/queue" replace />;
+  return children;
+}
+
 function RedirectIfAuthed({ children }) {
   const { currentUser } = useAuth();
   if (currentUser) return <Navigate to="/" replace />;
@@ -49,10 +55,24 @@ function App() {
           </RequireAuth>
         }
       >
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <RequireSpecialist>
+              <Dashboard />
+            </RequireSpecialist>
+          }
+        />
         <Route path="/queue" element={<Queue />} />
         <Route path="/queue/:id" element={<TicketDetail />} />
-        <Route path="/kanban" element={<Kanban />} />
+        <Route
+          path="/kanban"
+          element={
+            <RequireSpecialist>
+              <Kanban />
+            </RequireSpecialist>
+          }
+        />
         <Route path="/help" element={<ComingSoon title="Помощь" />} />
         <Route path="/settings" element={<ComingSoon title="Настройки" />} />
       </Route>

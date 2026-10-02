@@ -90,9 +90,13 @@ export default function Sidebar() {
         </Link>
 
         <nav className="sidebar-nav">
-          <NavItem to="/dashboard" icon={<LayoutDashboard size={20} strokeWidth={1.8} />} label="Dashboard" />
+          {currentUser.role === 'specialist' && (
+            <NavItem to="/dashboard" icon={<LayoutDashboard size={20} strokeWidth={1.8} />} label="Dashboard" />
+          )}
           <NavItem to="/queue" icon={<List size={20} strokeWidth={1.8} />} label="Очередь заявок" badge={urgentCount} />
-          <NavItem to="/kanban" icon={<Kanban size={20} strokeWidth={1.8} />} label="Kanban" />
+          {currentUser.role === 'specialist' && (
+            <NavItem to="/kanban" icon={<Kanban size={20} strokeWidth={1.8} />} label="Kanban" />
+          )}
         </nav>
 
         <div className="sidebar-divider" />
@@ -129,7 +133,7 @@ export default function Sidebar() {
               <strong>
                 {currentUser.firstName} {currentUser.lastName}
               </strong>
-              <small>{currentUser.role === 'specialist' ? 'Специалист поддержки' : departmentLabel(currentUser.department)}</small>
+              <small>{currentUser.role === 'specialist' ? 'Специалист поддержки' : 'Сотрудник'}</small>
             </span>
           </button>
         </div>
