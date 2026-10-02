@@ -42,8 +42,9 @@
 
 .dashboard-charts {
   display: grid;
-  grid-template-columns: repeat(2, minmax(260px, 420px));
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(320px, 1fr));
+  gap: 24px;
+  max-width: 1100px;
   margin-bottom: 40px;
 }
 
@@ -51,19 +52,19 @@
   background: #ffffff;
   border: 1px solid #e6e6e6;
   border-radius: 24px;
-  padding: 20px 24px;
+  padding: 28px 32px;
 }
 
 .dashboard-chart-row {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 32px;
 }
 
 .dashboard-legend {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   flex: 1;
   min-width: 0;
 }
@@ -71,19 +72,19 @@
 .dashboard-legend-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .legend-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .legend-label {
   flex: 1;
-  font-size: 14px;
+  font-size: 15px;
   color: #111111;
   white-space: nowrap;
   overflow: hidden;

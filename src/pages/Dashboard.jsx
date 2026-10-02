@@ -43,31 +43,31 @@ function buildSegments(data, circumference) {
 }
 
 function DonutChart({ data, centerLabel }) {
-  const radius = 54;
+  const radius = 70;
   const circumference = 2 * Math.PI * radius;
   const { segments, total } = buildSegments(data, circumference);
   return (
-    <svg viewBox="0 0 140 140" width="140" height="140" role="img" aria-label="Распределение заявок по статусам">
-      <g transform="rotate(-90 70 70)">
-        <circle cx="70" cy="70" r={radius} fill="none" stroke="#f0f0f0" strokeWidth="18" />
+    <svg viewBox="0 0 180 180" width="180" height="180" role="img" aria-label="Распределение заявок по статусам">
+      <g transform="rotate(-90 90 90)">
+        <circle cx="90" cy="90" r={radius} fill="none" stroke="#f0f0f0" strokeWidth="22" />
         {total > 0 &&
           segments
             .filter((s) => s.value > 0)
             .map((s) => (
               <circle
                 key={s.key}
-                cx="70"
-                cy="70"
+                cx="90"
+                cy="90"
                 r={radius}
                 fill="none"
                 stroke={s.color}
-                strokeWidth="18"
+                strokeWidth="22"
                 strokeDasharray={`${s.dash} ${circumference - s.dash}`}
                 strokeDashoffset={-s.offset}
               />
             ))}
       </g>
-      <text x="70" y="70" textAnchor="middle" dominantBaseline="central" fontSize="24" fontWeight="700" fill="#111111">
+      <text x="90" y="90" textAnchor="middle" dominantBaseline="central" fontSize="30" fontWeight="700" fill="#111111">
         {centerLabel ?? total}
       </text>
     </svg>
@@ -75,7 +75,7 @@ function DonutChart({ data, centerLabel }) {
 }
 
 function SlaGauge({ healthy, breached }) {
-  const radius = 54;
+  const radius = 70;
   const circumference = 2 * Math.PI * radius;
   const total = healthy + breached;
   const pct = total > 0 ? Math.round((healthy / total) * 100) : 100;
@@ -87,27 +87,27 @@ function SlaGauge({ healthy, breached }) {
     circumference,
   );
   return (
-    <svg viewBox="0 0 140 140" width="140" height="140" role="img" aria-label="Доля заявок в рамках SLA">
-      <g transform="rotate(-90 70 70)">
-        <circle cx="70" cy="70" r={radius} fill="none" stroke="#f0f0f0" strokeWidth="18" />
+    <svg viewBox="0 0 180 180" width="180" height="180" role="img" aria-label="Доля заявок в рамках SLA">
+      <g transform="rotate(-90 90 90)">
+        <circle cx="90" cy="90" r={radius} fill="none" stroke="#f0f0f0" strokeWidth="22" />
         {total > 0 &&
           segments
             .filter((s) => s.value > 0)
             .map((s) => (
               <circle
                 key={s.key}
-                cx="70"
-                cy="70"
+                cx="90"
+                cy="90"
                 r={radius}
                 fill="none"
                 stroke={s.color}
-                strokeWidth="18"
+                strokeWidth="22"
                 strokeDasharray={`${s.dash} ${circumference - s.dash}`}
                 strokeDashoffset={-s.offset}
               />
             ))}
       </g>
-      <text x="70" y="70" textAnchor="middle" dominantBaseline="central" fontSize="24" fontWeight="700" fill="#111111">
+      <text x="90" y="90" textAnchor="middle" dominantBaseline="central" fontSize="30" fontWeight="700" fill="#111111">
         {pct}%
       </text>
     </svg>
