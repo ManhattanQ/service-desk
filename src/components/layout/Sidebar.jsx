@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { HelpCircle, Settings, LayoutDashboard, List, Kanban, LogOut } from 'lucide-react';
+import { HelpCircle, Settings, LayoutDashboard, List, Kanban, LogOut, FilePenLine } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTickets } from '../../context/TicketsContext';
 import { departmentLabel } from '../../data/constants';
@@ -92,6 +92,9 @@ export default function Sidebar() {
         <nav className="sidebar-nav">
           {currentUser.role === 'specialist' && (
             <NavItem to="/dashboard" icon={<LayoutDashboard size={20} strokeWidth={1.8} />} label="Dashboard" />
+          )}
+          {currentUser.role === 'employee' && (
+            <NavItem to="/new-ticket" icon={<FilePenLine size={20} strokeWidth={1.8} />} label="Создание заявки" />
           )}
           <NavItem to="/queue" icon={<List size={20} strokeWidth={1.8} />} label="Очередь заявок" badge={urgentCount} />
           {currentUser.role === 'specialist' && (

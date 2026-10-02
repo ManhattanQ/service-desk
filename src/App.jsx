@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Queue from './pages/Queue';
 import Kanban from './pages/Kanban';
+import NewTicket from './pages/NewTicket';
 import TicketDetail from './pages/TicketDetail';
 import ComingSoon from './pages/ComingSoon';
 import AppLayout from './components/layout/AppLayout';
@@ -18,6 +19,12 @@ function RequireAuth({ children }) {
 function RequireSpecialist({ children }) {
   const { currentUser } = useAuth();
   if (currentUser.role !== 'specialist') return <Navigate to="/queue" replace />;
+  return children;
+}
+
+function RequireEmployee({ children }) {
+  const { currentUser } = useAuth();
+  if (currentUser.role !== 'employee') return <Navigate to="/queue" replace />;
   return children;
 }
 
@@ -65,6 +72,14 @@ function App() {
         />
         <Route path="/queue" element={<Queue />} />
         <Route path="/queue/:id" element={<TicketDetail />} />
+        <Route
+          path="/new-ticket"
+          element={
+            <RequireEmployee>
+              <NewTicket />
+            </RequireEmployee>
+          }
+        />
         <Route
           path="/kanban"
           element={

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { SEED_TICKETS } from '../data/mockTickets';
+import { computeDeadline } from '../utils/sla';
 
 const STORAGE_KEY = 'sd_tickets';
 // Bump whenever the ticket schema (status/priority values, required fields) changes,
@@ -31,8 +32,41 @@ export function TicketsProvider({ children }) {
     setTickets((prev) => prev.map((t) => (t.id === id ? { ...t, ...changes } : t)));
   }
 
+  function createTicket({ author, authorId, authorEmail, authorPhone, title, description, category, priority, department, attachments }) {
+    const maxNumber = tickets.reduce((max, t) => {
+      const n = parseInt(t.number.replace('#', ''), 10);
+      return Number.isFinite(n) && n > max ? n : max;
+    }, 0);
+    const number = `#${String(maxNumber + 1).padStart(2, '0')}`;
+    const createdAt = new Date().toISOString();
+    const id = `t${Date.now()}`;
+    const ticket = {
+      id,
+      number,
+      author,
+      authorId,
+      authorEmail,
+      authorPhone,
+      title,
+      description,
+      category,
+      department,
+      status: 'new',
+      priority,
+      assigneeId: null,
+      createdAt,
+      closedAt: null,
+      slaDeadline: computeDeadline(createdAt, priority),
+      comments: [],
+      attachments: attachments ?? [],
+      history: [{ id: `${id}-h1`, type: 'created', message: `${author} создал(а) заявку`, createdAt }],
+    };
+    setTickets((prev) => [...prev, ticket]);
+    return ticket;
+  }
+
   return (
-    <TicketsContext.Provider value={{ tickets, setTickets, updateTicket }}>
+    <TicketsContext.Provider value={{ tickets, setTickets, updateTicket, createTicket }}>
       {children}
     </TicketsContext.Provider>
   );
