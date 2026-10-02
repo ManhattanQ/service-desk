@@ -5,13 +5,13 @@
 .kanban-searchbar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  max-width: 950px;
-  padding: 9px 16px;
+  gap: 0.5rem;
+  max-width: 59.375rem;
+  padding: 0.5625rem 1rem;
   border: 1px solid #e6e6e6;
-  border-radius: 16px;
+  border-radius: 1rem;
   color: #999;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
   background: #ffffff;
 }
 
@@ -19,7 +19,7 @@
   border: none;
   outline: none;
   flex: 1;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-family: inherit;
   color: #111;
   background: transparent;
@@ -27,48 +27,48 @@
 
 .kanban-board {
   display: grid;
-  grid-template-columns: repeat(4, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(4, minmax(13.75rem, 1fr));
+  gap: 1rem;
   align-items: start;
 }
 
 .kanban-column {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.625rem;
 }
 
 .kanban-column-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  border-radius: 14px;
-  font-size: 14px;
+  padding: 0.75rem 1rem;
+  border-radius: 0.875rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.0125rem;
 }
 
 .kanban-column-count {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 24px;
-  height: 24px;
-  padding: 0 7px;
-  font-size: 12px;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.4375rem;
+  font-size: 0.75rem;
   font-weight: 700;
   background: #ffffff;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
 }
 
 .kanban-column-body {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  min-height: 80px;
-  padding: 4px;
-  border-radius: 12px;
+  gap: 0.625rem;
+  min-height: 5rem;
+  padding: 0.25rem;
+  border-radius: 0.75rem;
   transition: background 0.15s ease;
 }
 
@@ -79,8 +79,8 @@
 .kanban-card {
   background: #ffffff;
   border: 1px solid #e6e6e6;
-  border-radius: 12px;
-  padding: 10px 12px;
+  border-radius: 0.75rem;
+  padding: 0.625rem 0.75rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   cursor: grab;
   touch-action: none;
@@ -97,14 +97,14 @@
 }
 
 .kanban-card-number {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 700;
   color: #3f0b93;
-  margin-bottom: 2px;
+  margin-bottom: 0.125rem;
 }
 
 .kanban-card-text {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: #333;
   white-space: nowrap;
   overflow: hidden;
@@ -112,8 +112,8 @@
 }
 
 .kanban-empty {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: #999;
   text-align: center;
-  padding: 16px 0;
+  padding: 1rem 0;
 }

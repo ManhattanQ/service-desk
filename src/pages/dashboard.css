@@ -3,68 +3,68 @@
 }
 
 .dashboard-title {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #111111;
-  margin: 0 0 24px;
+  margin: 0 0 1.5rem;
 }
 
 .dashboard-tiles {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
-  margin-bottom: 40px;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
 }
 
 .dashboard-tile {
-  border-radius: 20px;
-  padding: 20px;
+  border-radius: 1.25rem;
+  padding: 1.25rem;
 }
 
 .dashboard-tile-value {
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 700;
-  margin: 0 0 4px;
+  margin: 0 0 0.25rem;
 }
 
 .dashboard-tile-label {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: rgba(0, 0, 0, 0.6);
   margin: 0;
 }
 
 .dashboard-subtitle {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #111111;
-  margin: 0 0 16px;
+  margin: 0 0 1rem;
 }
 
 .dashboard-charts {
   display: grid;
-  grid-template-columns: repeat(2, minmax(320px, 1fr));
-  gap: 24px;
-  max-width: 1100px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(2, minmax(20rem, 1fr));
+  gap: 1.5rem;
+  max-width: 68.75rem;
+  margin-bottom: 2.5rem;
 }
 
 .dashboard-card {
   background: #ffffff;
   border: 1px solid #e6e6e6;
-  border-radius: 24px;
-  padding: 28px 32px;
+  border-radius: 1.5rem;
+  padding: 1.75rem 2rem;
 }
 
 .dashboard-chart-row {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 2rem;
 }
 
 .dashboard-legend {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
   flex: 1;
   min-width: 0;
 }
@@ -72,12 +72,12 @@
 .dashboard-legend-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.625rem;
 }
 
 .legend-dot {
-  width: 12px;
-  height: 12px;
+  width: 0.75rem;
+  height: 0.75rem;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -85,7 +85,7 @@
 .legend-label {
   flex: 1;
   min-width: 0;
-  font-size: 15px;
+  font-size: 0.9375rem;
   color: #111111;
   white-space: nowrap;
   overflow: hidden;
@@ -95,14 +95,14 @@
 .legend-value {
   flex-shrink: 0;
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 700;
   color: #111111;
 }
 
 .dashboard-chart-note {
-  margin: 4px 0 0;
-  font-size: 12px;
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
   color: rgba(0, 0, 0, 0.5);
   line-height: 1.4;
 }
@@ -110,16 +110,16 @@
 .dashboard-workload {
   background: #ffffff;
   border: 1px solid #e6e6e6;
-  border-radius: 24px;
-  padding: 8px 24px;
-  max-width: 700px;
+  border-radius: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  max-width: 43.75rem;
 }
 
 .workload-row {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 14px 0;
+  gap: 1rem;
+  padding: 0.875rem 0;
   border-bottom: 1px solid #f0f0f0;
 }
 
@@ -128,16 +128,16 @@
 }
 
 .workload-name {
-  width: 170px;
+  width: 10.625rem;
   flex-shrink: 0;
-  font-size: 15px;
+  font-size: 0.9375rem;
   color: #111111;
 }
 
 .workload-bar-track {
   flex: 1;
-  height: 8px;
-  border-radius: 4px;
+  height: 0.5rem;
+  border-radius: 0.25rem;
   background: #f3e9ff;
   overflow: hidden;
 }
@@ -145,18 +145,18 @@
 .workload-bar-fill {
   height: 100%;
   background: #862aee;
-  border-radius: 4px;
+  border-radius: 0.25rem;
 }
 
 .workload-count {
-  width: 24px;
+  width: 1.5rem;
   text-align: right;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #3f0b93;
 }
 
 .workload-empty {
   color: #999999;
-  font-size: 14px;
+  font-size: 0.875rem;
 }

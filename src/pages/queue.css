@@ -11,7 +11,7 @@
   z-index: 20;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
   pointer-events: none;
 }
 
@@ -19,11 +19,11 @@
   pointer-events: auto;
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 0.5rem;
   background: #bcecc8;
-  border-radius: 4px;
-  padding: 12px 44px 12px 12px;
-  max-width: 600px;
+  border-radius: 0.25rem;
+  padding: 0.75rem 2.75rem 0.75rem 0.75rem;
+  max-width: 37.5rem;
   box-shadow: 0 6px 5px rgba(0, 0, 0, 0.14), 0 1px 9px rgba(0, 0, 0, 0.12), 0 3px 2.5px rgba(0, 0, 0, 0.2);
   animation: snackbar-in 0.25s ease-out;
   opacity: 1;
@@ -50,59 +50,60 @@
 .snackbar-icon {
   color: #29993e;
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 0.125rem;
 }
 
 .snackbar-title {
   margin: 0;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   color: rgba(0, 0, 0, 0.87);
 }
 
 .snackbar-body {
-  margin: 2px 0 0;
-  font-size: 14px;
+  margin: 0.125rem 0 0;
+  font-size: 0.875rem;
   color: rgba(0, 0, 0, 0.87);
 }
 
 .snackbar-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0.625rem;
+  right: 0.625rem;
   background: none;
   border: none;
   cursor: pointer;
   color: rgba(0, 0, 0, 0.6);
-  padding: 2px;
+  padding: 0.125rem;
 }
 
 .queue-searchbar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  max-width: 950px;
-  padding: 9px 16px;
+  gap: 0.5rem;
+  max-width: 59.375rem;
+  padding: 0.5625rem 1rem;
   border: 1px solid #e6e6e6;
-  border-radius: 16px;
+  border-radius: 1rem;
   color: #999;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
+  background: #ffffff;
 }
 
 .queue-searchbar input {
   border: none;
   outline: none;
   flex: 1;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-family: inherit;
   color: #111;
 }
 
 .queue-title {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #111;
-  margin: 0 0 16px;
+  margin: 0 0 1rem;
 }
 
 .queue-toolbar {
@@ -110,7 +111,7 @@
   align-items: flex-end;
   justify-content: space-between;
   border-bottom: 1px solid #e4e4e4;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
 }
 
 .queue-tabs {
@@ -121,9 +122,9 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 14px 24px 12px;
+  padding: 0.875rem 1.5rem 0.75rem;
   font-family: inherit;
-  font-size: 16px;
+  font-size: 1rem;
   color: #111;
   border-bottom: 2px solid transparent;
 }
@@ -137,25 +138,25 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
-  padding-bottom: 12px;
+  gap: 0.625rem;
+  padding-bottom: 0.75rem;
 }
 
 .queue-filter-label {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: 0.1px;
+  letter-spacing: 0.0063rem;
   text-transform: uppercase;
   color: rgba(0, 0, 0, 0.6);
 }
 
 .queue-filter-select {
   border: 1px solid #000;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   background: none;
-  padding: 6px 12px;
+  padding: 0.375rem 0.75rem;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: #111;
   cursor: pointer;
@@ -164,16 +165,16 @@
 .queue-table-card {
   background: #ffffff;
   border: 1px solid #e6e6e6;
-  border-radius: 32px;
+  border-radius: 2rem;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
   overflow: auto;
-  max-height: calc(100vh - 330px);
+  max-height: calc(100vh - 20.625rem);
 }
 
 .queue-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1100px;
+  min-width: 68.75rem;
 }
 
 .queue-table thead {
@@ -184,10 +185,10 @@
 
 .queue-table th {
   text-align: left;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.6);
-  padding: 12px 10px;
+  padding: 0.75rem 0.625rem;
   white-space: nowrap;
   background: #ffffff;
 }
@@ -203,8 +204,8 @@
 
 .sort-arrow {
   display: inline-block;
-  margin-left: 4px;
-  font-size: 10px;
+  margin-left: 0.25rem;
+  font-size: 0.625rem;
   color: rgba(0, 0, 0, 0.3);
 }
 
@@ -213,8 +214,8 @@
 }
 
 .queue-table td {
-  padding: 14px 10px;
-  font-size: 16px;
+  padding: 0.875rem 0.625rem;
+  font-size: 1rem;
   color: rgba(0, 0, 0, 0.87);
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   white-space: nowrap;
@@ -232,16 +233,16 @@
   border: none;
   background: transparent;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 0.9375rem;
   color: inherit;
   cursor: pointer;
 }
 
 .status-badge {
   display: inline-block;
-  padding: 4px 10px;
-  border-radius: 10px;
-  font-size: 13px;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.625rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   white-space: nowrap;
 }
@@ -268,10 +269,10 @@
 
 .sla-pill {
   display: inline-block;
-  padding: 3px 8px;
-  border-radius: 10px;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 0.625rem;
   border: 1px solid;
-  font-size: 12px;
+  font-size: 0.75rem;
   white-space: nowrap;
 }
 
@@ -297,35 +298,35 @@
 .queue-empty {
   text-align: center;
   color: #999;
-  padding: 32px 0 !important;
+  padding: 2rem 0 !important;
 }
 
 .queue-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 24px;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
 }
 
 .btn-primary {
   background: #f3e9ff;
   color: #3f0b93;
   border: 1px solid #e6e6e6;
-  border-radius: 10px;
-  padding: 10px 20px;
+  border-radius: 0.625rem;
+  padding: 0.625rem 1.25rem;
   font-family: inherit;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 1rem;
   cursor: pointer;
 }
 
 .btn-pill {
   background: none;
   border: 1px solid #e6e6e6;
-  border-radius: 10px;
-  padding: 10px 20px;
+  border-radius: 0.625rem;
+  padding: 0.625rem 1.25rem;
   font-family: inherit;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 1rem;
   cursor: pointer;
 }
 

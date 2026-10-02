@@ -12,7 +12,9 @@
   --accent: #8b3bff;
   --accent-dark: #3b1266;
 
-  font: 16px/145% 'Montserrat', system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Montserrat', system-ui, 'Segoe UI', Roboto, sans-serif;
+  line-height: 145%;
+  font-size: 16px;
   color-scheme: light;
   color: var(--text-h);
   background: var(--bg);
@@ -22,12 +24,50 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Весь интерфейс собран в rem, так что этот масштаб пропорционально
+   уменьшает всё разом — на HD/FHD плотность получается как на 2K+. */
+@media (max-width: 1920px) {
+  :root {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 1600px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+}
+
+/* Тонкий скроллбар вместо толстого нативного */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.22) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.22);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.35);
 }
 
 h1, h2, h3 {
