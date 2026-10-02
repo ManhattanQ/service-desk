@@ -19,26 +19,16 @@ function NavItem({ to, icon, label, badge }) {
 }
 
 const PRIORITY_DOT_COLOR = { critical: '#f53b57', high: '#ff7504' };
-const VISIBLE_COUNT = 4;
+const VISIBLE_COUNT = 5;
 
 function PriorityList({ title, tickets }) {
-  const [scrollable, setScrollable] = useState(false);
-  const listRef = useRef(null);
   if (tickets.length === 0) return null;
   const overflow = tickets.length - VISIBLE_COUNT;
 
-  function collapse() {
-    setScrollable(false);
-    if (listRef.current) listRef.current.scrollTop = 0;
-  }
-
   return (
     <div className="sidebar-priority-group">
-      <p className="sidebar-priority-title">
-        <span className="priority-dot" style={{ background: '#dc2626' }} />
-        {title}
-      </p>
-      <div ref={listRef} className={`sidebar-priority-list${scrollable ? ' scrollable' : ''}`}>
+      <p className="sidebar-priority-title">{title}</p>
+      <div className="sidebar-priority-list scrollable">
         {tickets.map((t) => (
           <div key={t.id} className="sidebar-priority-card">
             <div className="sidebar-priority-card-top">
@@ -59,15 +49,7 @@ function PriorityList({ title, tickets }) {
           </div>
         ))}
       </div>
-      {overflow > 0 && (
-        <button
-          type="button"
-          className="sidebar-priority-more"
-          onClick={() => (scrollable ? collapse() : setScrollable(true))}
-        >
-          {scrollable ? 'Свернуть' : `+${overflow} ещё`}
-        </button>
-      )}
+      {overflow > 0 && <p className="sidebar-priority-more-hint">+{overflow} ещё ниже</p>}
     </div>
   );
 }
