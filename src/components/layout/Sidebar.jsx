@@ -22,7 +22,7 @@ function PriorityList({ title, dotColor, tickets }) {
   const [scrollable, setScrollable] = useState(false);
   const listRef = useRef(null);
   if (tickets.length === 0) return null;
-  const overflow = tickets.length - 3;
+  const overflow = tickets.length - 2;
 
   function collapse() {
     setScrollable(false);
