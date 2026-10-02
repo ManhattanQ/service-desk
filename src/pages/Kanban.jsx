@@ -10,10 +10,16 @@ import {
   useDroppable,
 } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import { categoryLabel, departmentLabel } from '../data/constants';
 import { SearchIcon } from '../components/icons/NavIcons';
 import './kanban.css';
+
+function assigneeName(users, assigneeId) {
+  const user = users.find((u) => u.id === assigneeId);
+  return user ? `${user.firstName} ${user.lastName}` : '';
+}
 
 const COLUMNS = [
   {
@@ -99,6 +105,7 @@ function KanbanColumn({ column, tickets }) {
 }
 
 export default function Kanban() {
+  const { users } = useAuth();
   const { tickets, updateTicket } = useTickets();
   const [search, setSearch] = useState('');
   const [activeId, setActiveId] = useState(null);
@@ -114,9 +121,10 @@ export default function Kanban() {
         t.author.toLowerCase().includes(q) ||
         t.title.toLowerCase().includes(q) ||
         categoryLabel(t.category).toLowerCase().includes(q) ||
-        departmentLabel(t.department).toLowerCase().includes(q),
+        departmentLabel(t.department).toLowerCase().includes(q) ||
+        assigneeName(users, t.assigneeId).toLowerCase().includes(q),
     );
-  }, [tickets, search]);
+  }, [tickets, search, users]);
 
   function handleDragStart(event) {
     setActiveId(event.active.id);
@@ -128,7 +136,9 @@ export default function Kanban() {
     if (!over) return;
     const ticket = tickets.find((t) => t.id === active.id);
     if (ticket && ticket.status !== over.id) {
-      updateTicket(ticket.id, { status: over.id });
+      const changes = { status: over.id };
+      if (over.id === 'closed') changes.closedAt = new Date().toISOString();
+      updateTicket(ticket.id, changes);
     }
   }
 

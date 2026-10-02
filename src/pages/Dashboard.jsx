@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import { getSlaState } from '../utils/sla';
@@ -118,6 +118,12 @@ export default function Dashboard() {
   const { users } = useAuth();
   const { tickets } = useTickets();
 
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setTick((n) => n + 1), 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   const stats = useMemo(() => {
     const newCount = tickets.filter((t) => t.status === 'new').length;
     const inProgress = tickets.filter((t) => t.status === 'in_progress').length;
@@ -127,7 +133,7 @@ export default function Dashboard() {
       (t) => t.status === 'closed' && t.closedAt && isToday(t.closedAt),
     ).length;
     return { new: newCount, in_progress: inProgress, on_hold: onHold, overdue, closed_today: closedToday };
-  }, [tickets]);
+  }, [tickets, tick]);
 
   const statusData = useMemo(
     () =>
@@ -142,7 +148,7 @@ export default function Dashboard() {
     const open = tickets.filter((t) => t.status !== 'closed');
     const breached = open.filter((t) => getSlaState(t) === 'overdue').length;
     return { healthy: open.length - breached, breached };
-  }, [tickets]);
+  }, [tickets, tick]);
 
   const workload = useMemo(() => {
     const specialists = users.filter((u) => u.role === 'specialist');

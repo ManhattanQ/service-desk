@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTickets } from '../../context/TicketsContext';
@@ -40,7 +40,11 @@ function PriorityList({ title, dotColor, tickets }) {
           <div key={t.id} className="sidebar-priority-card">
             <div className="sidebar-priority-card-top">
               <span className="sidebar-priority-number">{t.number}</span>
-              <span className={`sidebar-sla-pill sla-${getSlaState(t)}`}>{formatTimeLeft(t)}</span>
+              {t.status === 'on_hold' ? (
+                <span className="sidebar-sla-dash">-</span>
+              ) : (
+                <span className={`sidebar-sla-pill sla-${getSlaState(t)}`}>{formatTimeLeft(t)}</span>
+              )}
             </div>
             <p className="sidebar-priority-card-title">{t.title}</p>
             <p className="sidebar-priority-card-meta">
@@ -65,6 +69,12 @@ function PriorityList({ title, dotColor, tickets }) {
 export default function Sidebar() {
   const { currentUser, logout } = useAuth();
   const { tickets } = useTickets();
+
+  const [, forceTick] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => forceTick((n) => n + 1), 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const openTickets = tickets.filter((t) => t.status !== 'closed');
   const urgentCount = openTickets.filter((t) => t.priority === 'critical' || t.priority === 'high').length;
