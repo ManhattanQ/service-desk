@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { HelpCircle, Settings, LayoutDashboard, List, Kanban, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTickets } from '../../context/TicketsContext';
@@ -96,10 +96,10 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-top">
-        <div className="sidebar-brand">
+        <Link to="/queue" className="sidebar-brand">
           <img src={logoMark} alt="" className="sidebar-logo" />
           <span>Solution Center</span>
-        </div>
+        </Link>
 
         <nav className="sidebar-nav">
           <NavItem to="/dashboard" icon={<LayoutDashboard size={20} strokeWidth={1.8} />} label="Dashboard" />
