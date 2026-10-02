@@ -268,6 +268,20 @@ export default function TicketDetail() {
                 >
                   Ответить
                 </button>
+                <div className="td-assign-wrap" ref={assignRef}>
+                  <button type="button" className="td-btn td-btn-primary" onClick={() => setAssignOpen((v) => !v)}>
+                    Назначить
+                  </button>
+                  {assignOpen && (
+                    <div className="td-assign-menu">
+                      {specialists.map((s) => (
+                        <button key={s.id} type="button" className="td-assign-option" onClick={() => handleAssign(s.id)}>
+                          {s.firstName} {s.lastName}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <button type="button" className="td-btn td-btn-outline" onClick={handleClose}>
                   Выполнить
                 </button>
@@ -331,28 +345,6 @@ export default function TicketDetail() {
           </Panel>
 
           <Panel title="Информация о заявки" open={infoOpen} onToggle={() => setInfoOpen((v) => !v)}>
-            <div className="td-info-actions">
-              <div className="td-assign-wrap" ref={assignRef}>
-                <button
-                  type="button"
-                  className="td-btn td-btn-soft td-btn-sm"
-                  disabled={isClosed}
-                  onClick={() => setAssignOpen((v) => !v)}
-                >
-                  Назначить
-                </button>
-                {assignOpen && !isClosed && (
-                  <div className="td-assign-menu">
-                    {specialists.map((s) => (
-                      <button key={s.id} type="button" className="td-assign-option" onClick={() => handleAssign(s.id)}>
-                        {s.firstName} {s.lastName}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
             <div className="td-info-card">
               <div className="td-info-card-header">
                 <span>{ticket.number}</span>
