@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import {
   TICKET_PRIORITIES,
+  TICKET_STATUSES,
   departmentLabel,
   priorityInfo,
   statusLabel,
@@ -184,6 +185,24 @@ export default function TicketDetail() {
     setAssignOpen(false);
   }
 
+  function handleStatusChange(e) {
+    const nextStatus = e.target.value;
+    if (nextStatus === ticket.status) return;
+    let history = pushHistory(`статус изменён: ${statusLabel(ticket.status)} → ${statusLabel(nextStatus)}`, 'status_changed');
+    const changes = { status: nextStatus };
+    if (nextStatus === 'closed') {
+      changes.closedAt = new Date().toISOString();
+      if (!ticket.assigneeId) {
+        changes.assigneeId = currentUser.id;
+        history = appendHistory({ history }, `${currentUser.firstName} ${currentUser.lastName} назначен(а) исполнителем`, 'assigned');
+      }
+    } else if (ticket.status === 'closed') {
+      changes.closedAt = null;
+    }
+    changes.history = history;
+    updateTicket(ticket.id, changes);
+  }
+
   function handleClose() {
     let history = pushHistory(`статус изменён: ${statusLabel(ticket.status)} → ${statusLabel('closed')}`, 'closed');
     const changes = { status: 'closed', closedAt: new Date().toISOString() };
@@ -264,10 +283,23 @@ export default function TicketDetail() {
                 </select>
               </span>
             )}
-            <span>
-              <span className="td-meta-label">Статус </span>
-              {statusLabel(ticket.status)}
-            </span>
+            {isEmployee ? (
+              <span>
+                <span className="td-meta-label">Статус </span>
+                {statusLabel(ticket.status)}
+              </span>
+            ) : (
+              <span className="td-meta-field">
+                <span className="td-meta-label">Статус</span>
+                <select className="td-meta-select" value={ticket.status} onChange={handleStatusChange}>
+                  {TICKET_STATUSES.map((s) => (
+                    <option key={s.value} value={s.value}>
+                      {s.label}
+                    </option>
+                  ))}
+                </select>
+              </span>
+            )}
             <span>
               <span className="td-meta-label">Исполнитель </span>
               {assigneeName}
