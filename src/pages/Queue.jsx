@@ -380,14 +380,14 @@ export default function Queue() {
           <button type="button" className="btn-primary" onClick={handleAssign}>
             Взять в работу
           </button>
-          <button type="button" className="btn-outline" onClick={handleHold}>
-            ОЖИДАНИЕ ОТВЕТА
+          <button type="button" className="btn-pill btn-hold" onClick={handleHold}>
+            Ожидание ответа
           </button>
-          <button type="button" className="btn-outline" onClick={handleResume}>
-            ВОЗОБНОВИТЬ
+          <button type="button" className="btn-pill btn-resume" onClick={handleResume}>
+            Возобновить
           </button>
-          <button type="button" className="btn-outline" onClick={handleClose}>
-            ЗАВЕРШИТЬ
+          <button type="button" className="btn-pill btn-close" onClick={handleClose}>
+            Завершить
           </button>
         </div>
       )}

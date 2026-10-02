@@ -318,15 +318,28 @@
   cursor: pointer;
 }
 
-.btn-outline {
+.btn-pill {
   background: none;
-  border: 1px solid #000;
+  border: 1px solid #e6e6e6;
   border-radius: 10px;
-  padding: 8px 20px;
+  padding: 10px 20px;
   font-family: inherit;
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.55px;
-  color: #111;
+  font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
+}
+
+.btn-hold {
+  background: #fff4e0;
+  color: #b45309;
+}
+
+.btn-resume {
+  background: #e0edff;
+  color: #1d4ed8;
+}
+
+.btn-close {
+  background: #e9f9ee;
+  color: #1a7f37;
 }
