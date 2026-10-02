@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import {
   DndContext,
+  DragOverlay,
   closestCenter,
   PointerSensor,
   useSensor,
@@ -20,23 +21,27 @@ const COLUMNS = [
   { status: 'closed', title: 'Выполнены', color: '#1a7f37', bg: '#e9f9ee' },
 ];
 
-function KanbanCard({ ticket }) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: ticket.id });
-  const style = transform
-    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`, zIndex: 10 }
-    : undefined;
+function CardContent({ ticket }) {
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      className={`kanban-card${isDragging ? ' dragging' : ''}`}
-    >
+    <>
       <div className="kanban-card-number">{ticket.number}</div>
       <div className="kanban-card-text">
         {ticket.author}; {ticket.title}; {departmentLabel(ticket.department)}
       </div>
+    </>
+  );
+}
+
+function KanbanCard({ ticket }) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: ticket.id });
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className={`kanban-card${isDragging ? ' placeholder' : ''}`}
+    >
+      <CardContent ticket={ticket} />
     </div>
   );
 }
@@ -62,7 +67,9 @@ function KanbanColumn({ column, tickets }) {
 export default function Kanban() {
   const { tickets, updateTicket } = useTickets();
   const [search, setSearch] = useState('');
+  const [activeId, setActiveId] = useState(null);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
+  const activeTicket = tickets.find((t) => t.id === activeId);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return tickets;
@@ -75,8 +82,13 @@ export default function Kanban() {
     );
   }, [tickets, search]);
 
+  function handleDragStart(event) {
+    setActiveId(event.active.id);
+  }
+
   function handleDragEnd(event) {
     const { active, over } = event;
+    setActiveId(null);
     if (!over) return;
     const ticket = tickets.find((t) => t.id === active.id);
     if (ticket && ticket.status !== over.id) {
@@ -94,7 +106,12 @@ export default function Kanban() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
         <div className="kanban-board">
           {COLUMNS.map((col) => (
             <KanbanColumn
@@ -104,6 +121,13 @@ export default function Kanban() {
             />
           ))}
         </div>
+        <DragOverlay>
+          {activeTicket && (
+            <div className="kanban-card overlay">
+              <CardContent ticket={activeTicket} />
+            </div>
+          )}
+        </DragOverlay>
       </DndContext>
     </div>
   );

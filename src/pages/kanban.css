@@ -27,7 +27,7 @@
 
 .kanban-board {
   display: grid;
-  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  grid-template-columns: repeat(4, minmax(220px, 280px));
   gap: 16px;
   align-items: start;
 }
@@ -78,9 +78,14 @@
   touch-action: none;
 }
 
-.kanban-card.dragging {
-  opacity: 0.6;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+.kanban-card.placeholder {
+  opacity: 0.35;
+}
+
+.kanban-card.overlay {
+  cursor: grabbing;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  transform: scale(1.03);
 }
 
 .kanban-card-number {
