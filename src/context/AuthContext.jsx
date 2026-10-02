@@ -54,8 +54,17 @@ export function AuthProvider({ children }) {
     localStorage.removeItem(SESSION_KEY);
   }, []);
 
+  const updateUser = useCallback(
+    (id, changes) => {
+      const next = users.map((u) => (u.id === id ? { ...u, ...changes } : u));
+      setUsers(next);
+      saveUsers(next);
+    },
+    [users],
+  );
+
   return (
-    <AuthContext.Provider value={{ currentUser, users, login, register, logout }}>
+    <AuthContext.Provider value={{ currentUser, users, login, register, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

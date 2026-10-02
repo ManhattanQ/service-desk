@@ -131,7 +131,11 @@ export default function Sidebar() {
             className="sidebar-profile"
             onClick={() => setMenuOpen((v) => !v)}
           >
-            <span className="sidebar-avatar" />
+            {currentUser.avatarUrl ? (
+              <img src={currentUser.avatarUrl} alt="" className="sidebar-avatar sidebar-avatar-img" />
+            ) : (
+              <span className="sidebar-avatar" />
+            )}
             <span className="sidebar-profile-text">
               <strong>
                 {currentUser.firstName} {currentUser.lastName}

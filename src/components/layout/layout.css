@@ -336,6 +336,11 @@
   flex-shrink: 0;
 }
 
+.sidebar-avatar-img {
+  object-fit: cover;
+  display: block;
+}
+
 .sidebar-profile-text {
   display: flex;
   flex-direction: column;

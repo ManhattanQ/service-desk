@@ -7,6 +7,7 @@ import Queue from './pages/Queue';
 import Kanban from './pages/Kanban';
 import NewTicket from './pages/NewTicket';
 import TicketDetail from './pages/TicketDetail';
+import Profile from './pages/Profile';
 import ComingSoon from './pages/ComingSoon';
 import AppLayout from './components/layout/AppLayout';
 
@@ -89,7 +90,7 @@ function App() {
           }
         />
         <Route path="/help" element={<ComingSoon title="Помощь" />} />
-        <Route path="/settings" element={<ComingSoon title="Настройки" />} />
+        <Route path="/settings" element={<Profile />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
