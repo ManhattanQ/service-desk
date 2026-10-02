@@ -84,6 +84,7 @@
 
 .legend-label {
   flex: 1;
+  min-width: 0;
   font-size: 15px;
   color: #111111;
   white-space: nowrap;
@@ -92,6 +93,8 @@
 }
 
 .legend-value {
+  flex-shrink: 0;
+  white-space: nowrap;
   font-size: 14px;
   font-weight: 700;
   color: #111111;
