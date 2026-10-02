@@ -91,6 +91,18 @@ export default function Queue() {
     setFilters((f) => ({ ...f, [key]: value }));
   }
 
+  function selectTab(value) {
+    setTab(value);
+    setFilters((f) => {
+      const next = { ...f };
+      if (value === 'new') next.status = 'new';
+      else if (value === 'closed') next.status = 'closed';
+      else if (f.status === 'new' || f.status === 'closed') next.status = 'all';
+      if (value === 'urgent') next.priority = 'all';
+      return next;
+    });
+  }
+
   function resetFilters() {
     setFilters({ category: 'all', status: 'all', priority: 'all', department: 'all' });
   }
@@ -241,7 +253,7 @@ export default function Queue() {
               key={t.value}
               type="button"
               className={`queue-tab${tab === t.value ? ' active' : ''}`}
-              onClick={() => setTab(t.value)}
+              onClick={() => selectTab(t.value)}
             >
               {t.label}
             </button>
@@ -264,10 +276,11 @@ export default function Queue() {
           <select
             className="queue-filter-select"
             value={filters.status}
+            disabled={tab === 'new' || tab === 'closed'}
             onChange={(e) => setFilter('status', e.target.value)}
           >
             <option value="all">Все статусы</option>
-            {TICKET_STATUSES.filter((s) => s.value !== 'closed').map((s) => (
+            {TICKET_STATUSES.filter((s) => tab === 'closed' || s.value !== 'closed').map((s) => (
               <option key={s.value} value={s.value}>
                 {s.label}
               </option>
@@ -276,6 +289,7 @@ export default function Queue() {
           <select
             className="queue-filter-select"
             value={filters.priority}
+            disabled={tab === 'urgent'}
             onChange={(e) => setFilter('priority', e.target.value)}
           >
             <option value="all">Все приоритеты</option>
