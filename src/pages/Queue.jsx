@@ -364,7 +364,7 @@ export default function Queue() {
                   </td>
                   <td>
                     <select
-                      className="queue-select"
+                      className={`queue-select priority-${t.priority}`}
                       value={t.priority}
                       disabled={isDone}
                       onChange={(e) => {
