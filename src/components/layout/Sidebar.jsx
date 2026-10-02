@@ -73,7 +73,9 @@ export default function Sidebar() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, [menuOpen]);
 
-  const openTickets = tickets.filter((t) => t.status !== 'closed');
+  const openTickets = tickets.filter(
+    (t) => t.status !== 'closed' && (currentUser.role !== 'employee' || t.authorId === currentUser.id),
+  );
   const byTimeLeft = [...openTickets].sort((a, b) => {
     const timeA = a.status === 'on_hold' ? Infinity : new Date(a.slaDeadline).getTime();
     const timeB = b.status === 'on_hold' ? Infinity : new Date(b.slaDeadline).getTime();
