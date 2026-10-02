@@ -3,6 +3,7 @@ import { useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Queue from './pages/Queue';
+import Kanban from './pages/Kanban';
 import ComingSoon from './pages/ComingSoon';
 import AppLayout from './components/layout/AppLayout';
 
@@ -48,7 +49,7 @@ function App() {
       >
         <Route path="/dashboard" element={<ComingSoon title="Dashboard" />} />
         <Route path="/queue" element={<Queue />} />
-        <Route path="/kanban" element={<ComingSoon title="Kanban" />} />
+        <Route path="/kanban" element={<Kanban />} />
         <Route path="/help" element={<ComingSoon title="Помощь" />} />
         <Route path="/settings" element={<ComingSoon title="Настройки" />} />
       </Route>

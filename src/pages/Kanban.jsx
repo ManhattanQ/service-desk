@@ -1,0 +1,110 @@
+import { useMemo, useState } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDraggable,
+  useDroppable,
+} from '@dnd-kit/core';
+import { useTickets } from '../context/TicketsContext';
+import { departmentLabel } from '../data/constants';
+import { SearchIcon } from '../components/icons/NavIcons';
+import './kanban.css';
+
+const COLUMNS = [
+  { status: 'new', title: 'Новые', color: '#4338ca', bg: '#eef2ff' },
+  { status: 'in_progress', title: 'В работе', color: '#1d4ed8', bg: '#e0edff' },
+  { status: 'on_hold', title: 'Ожидают ответа', color: '#b45309', bg: '#fff4e0' },
+  { status: 'closed', title: 'Выполнены', color: '#1a7f37', bg: '#e9f9ee' },
+];
+
+function KanbanCard({ ticket }) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: ticket.id });
+  const style = transform
+    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`, zIndex: 10 }
+    : undefined;
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className={`kanban-card${isDragging ? ' dragging' : ''}`}
+    >
+      <div className="kanban-card-number">{ticket.number}</div>
+      <div className="kanban-card-text">
+        {ticket.author}; {ticket.title}; {departmentLabel(ticket.department)}
+      </div>
+    </div>
+  );
+}
+
+function KanbanColumn({ column, tickets }) {
+  const { setNodeRef, isOver } = useDroppable({ id: column.status });
+  return (
+    <div className="kanban-column">
+      <div className="kanban-column-header" style={{ background: column.bg, color: column.color }}>
+        <span>{column.title}</span>
+        <span className="kanban-column-count">{tickets.length}</span>
+      </div>
+      <div ref={setNodeRef} className={`kanban-column-body${isOver ? ' over' : ''}`}>
+        {tickets.map((t) => (
+          <KanbanCard key={t.id} ticket={t} />
+        ))}
+        {tickets.length === 0 && <div className="kanban-empty">Пусто</div>}
+      </div>
+    </div>
+  );
+}
+
+export default function Kanban() {
+  const { tickets, updateTicket } = useTickets();
+  const [search, setSearch] = useState('');
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
+
+  const filtered = useMemo(() => {
+    if (!search.trim()) return tickets;
+    const q = search.trim().toLowerCase();
+    return tickets.filter(
+      (t) =>
+        t.number.toLowerCase().includes(q) ||
+        t.author.toLowerCase().includes(q) ||
+        t.title.toLowerCase().includes(q),
+    );
+  }, [tickets, search]);
+
+  function handleDragEnd(event) {
+    const { active, over } = event;
+    if (!over) return;
+    const ticket = tickets.find((t) => t.id === active.id);
+    if (ticket && ticket.status !== over.id) {
+      updateTicket(ticket.id, { status: over.id });
+    }
+  }
+
+  return (
+    <div className="kanban-page">
+      <div className="kanban-searchbar">
+        <SearchIcon />
+        <input
+          placeholder="Поиск по номеру, автору, теме..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <div className="kanban-board">
+          {COLUMNS.map((col) => (
+            <KanbanColumn
+              key={col.status}
+              column={col}
+              tickets={filtered.filter((t) => t.status === col.status)}
+            />
+          ))}
+        </div>
+      </DndContext>
+    </div>
+  );
+}
