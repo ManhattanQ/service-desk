@@ -14,7 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
-import { categoryLabel, departmentLabel } from '../data/constants';
+import { categoryLabel, departmentLabel, statusLabel } from '../data/constants';
+import { appendHistory } from '../utils/history';
 import './kanban.css';
 
 function assigneeName(users, assigneeId) {
@@ -139,8 +140,16 @@ export default function Kanban() {
     if (!over) return;
     const ticket = tickets.find((t) => t.id === active.id);
     if (ticket && ticket.status !== over.id) {
-      const changes = { status: over.id };
+      const changes = {
+        status: over.id,
+        history: appendHistory(
+          ticket,
+          `статус изменён: ${statusLabel(ticket.status)} → ${statusLabel(over.id)}`,
+          over.id === 'closed' ? 'closed' : 'status_changed',
+        ),
+      };
       if (over.id === 'closed') changes.closedAt = new Date().toISOString();
+      else if (ticket.status === 'closed') changes.closedAt = null;
       updateTicket(ticket.id, changes);
     }
   }

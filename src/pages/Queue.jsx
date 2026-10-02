@@ -10,8 +10,10 @@ import {
   categoryLabel,
   departmentLabel,
   statusLabel,
+  priorityInfo,
 } from '../data/constants';
 import { getSlaState, formatTimeLeft, computeDeadline } from '../utils/sla';
+import { appendHistory } from '../utils/history';
 import { Search, CheckCircle2, X, RotateCcw } from 'lucide-react';
 import './queue.css';
 
@@ -195,8 +197,7 @@ export default function Queue() {
     [selected, tickets],
   );
 
-  const canAssign =
-    selectedTickets.length > 0 && selectedTickets.every((t) => t.status === 'new' || t.status === 'on_hold');
+  const canAssign = selectedTickets.length > 0 && selectedTickets.every((t) => t.status === 'new');
   const canResume = selectedTickets.length > 0 && selectedTickets.every((t) => t.status === 'on_hold');
   const canClose = selectedTickets.length > 0 && selectedTickets.every((t) => t.status !== 'closed');
 
@@ -205,21 +206,44 @@ export default function Queue() {
   }
 
   function handleAssign() {
-    selected.forEach((id) => updateTicket(id, { assigneeId: currentUser.id, status: 'in_progress' }));
+    selected.forEach((id) => {
+      const t = tickets.find((x) => x.id === id);
+      if (!t) return;
+      updateTicket(id, {
+        assigneeId: currentUser.id,
+        status: 'in_progress',
+        history: appendHistory(t, `${currentUser.firstName} ${currentUser.lastName} взял(а) заявку в работу`, 'assigned'),
+      });
+    });
     setToast(`Взято в работу: ${selected.length} заявок.`);
     setSelected([]);
   }
 
   function handleClose() {
     const count = selected.length;
-    selected.forEach((id) => updateTicket(id, { status: 'closed', closedAt: new Date().toISOString() }));
+    selected.forEach((id) => {
+      const t = tickets.find((x) => x.id === id);
+      if (!t) return;
+      updateTicket(id, {
+        status: 'closed',
+        closedAt: new Date().toISOString(),
+        history: appendHistory(t, `статус изменён: ${statusLabel(t.status)} → ${statusLabel('closed')}`, 'closed'),
+      });
+    });
     setToast(`Завершено заявок: ${count}.`);
     setSelected([]);
   }
 
   function handleResume() {
     const count = selected.length;
-    selected.forEach((id) => updateTicket(id, { status: 'in_progress' }));
+    selected.forEach((id) => {
+      const t = tickets.find((x) => x.id === id);
+      if (!t) return;
+      updateTicket(id, {
+        status: 'in_progress',
+        history: appendHistory(t, `статус изменён: ${statusLabel(t.status)} → ${statusLabel('in_progress')}`, 'status_changed'),
+      });
+    });
     setToast(`Возобновлено в работе: ${count}.`);
     setSelected([]);
   }
@@ -392,7 +416,15 @@ export default function Queue() {
                       disabled={isDone}
                       onChange={(e) => {
                         const priority = e.target.value;
-                        updateTicket(t.id, { priority, slaDeadline: computeDeadline(t.createdAt, priority) });
+                        updateTicket(t.id, {
+                          priority,
+                          slaDeadline: computeDeadline(t.createdAt, priority),
+                          history: appendHistory(
+                            t,
+                            `приоритет изменён: ${priorityInfo(t.priority)?.label} → ${priorityInfo(priority)?.label}`,
+                            'priority_changed',
+                          ),
+                        });
                       }}
                     >
                       {TICKET_PRIORITIES.map((p) => (

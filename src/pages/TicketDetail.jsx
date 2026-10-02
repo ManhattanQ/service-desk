@@ -11,6 +11,7 @@ import {
   statusLabel,
 } from '../data/constants';
 import { formatTimeLeft, getSlaState, computeDeadline } from '../utils/sla';
+import { appendHistory } from '../utils/history';
 import './ticketDetail.css';
 
 function formatDate(iso) {
@@ -95,13 +96,19 @@ export default function TicketDetail() {
   const isClosed = ticket.status === 'closed';
 
   function pushHistory(message, type = 'note') {
-    const entry = { id: `h${Date.now()}`, type, message, createdAt: new Date().toISOString() };
-    return [...ticket.history, entry];
+    return appendHistory(ticket, message, type);
   }
 
   function handlePriorityChange(e) {
     const priority = e.target.value;
-    updateTicket(ticket.id, { priority, slaDeadline: computeDeadline(ticket.createdAt, priority) });
+    updateTicket(ticket.id, {
+      priority,
+      slaDeadline: computeDeadline(ticket.createdAt, priority),
+      history: pushHistory(
+        `приоритет изменён: ${priorityInfo(ticket.priority)?.label} → ${priorityInfo(priority)?.label}`,
+        'priority_changed',
+      ),
+    });
   }
 
   function handleStatusChange(e) {
@@ -112,6 +119,7 @@ export default function TicketDetail() {
       history: pushHistory(`статус изменён: ${statusLabel(ticket.status)} → ${statusLabel(nextStatus)}`, 'status_changed'),
     };
     if (nextStatus === 'closed') changes.closedAt = new Date().toISOString();
+    else if (ticket.status === 'closed') changes.closedAt = null;
     updateTicket(ticket.id, changes);
   }
 
@@ -371,9 +379,11 @@ export default function TicketDetail() {
                 <div className="td-divider-light" />
                 <div className="td-info-row">
                   <p className="td-info-label">Срок</p>
-                  <p className={`td-info-value sla-${getSlaState(ticket)}`}>
-                    {isClosed ? '—' : formatTimeLeft(ticket)}
-                  </p>
+                  {isClosed || ticket.status === 'on_hold' ? (
+                    <p className="td-info-value">—</p>
+                  ) : (
+                    <p className={`td-info-value sla-${getSlaState(ticket)}`}>{formatTimeLeft(ticket)}</p>
+                  )}
                 </div>
                 <div className="td-divider-light" />
                 <div className="td-info-row">
