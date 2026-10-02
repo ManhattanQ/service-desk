@@ -27,7 +27,7 @@
 
 .kanban-board {
   display: grid;
-  grid-template-columns: repeat(4, minmax(220px, 280px));
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
   gap: 16px;
   align-items: start;
 }
