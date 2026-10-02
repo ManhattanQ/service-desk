@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { HelpCircle, Settings } from 'lucide-react';
+import { HelpCircle, Settings, LayoutDashboard, List, Kanban, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTickets } from '../../context/TicketsContext';
 import { departmentLabel } from '../../data/constants';
 import { getSlaState, formatTimeLeft } from '../../utils/sla';
-import { DashboardIcon, QueueIcon, KanbanIcon, LogoutIcon } from '../icons/NavIcons';
 import logoMark from '../../assets/layout/logo-mark.png';
 import './layout.css';
 
@@ -103,9 +102,9 @@ export default function Sidebar() {
         </div>
 
         <nav className="sidebar-nav">
-          <NavItem to="/dashboard" icon={<DashboardIcon />} label="Dashboard" />
-          <NavItem to="/queue" icon={<QueueIcon />} label="Очередь заявок" badge={urgentCount} />
-          <NavItem to="/kanban" icon={<KanbanIcon />} label="Kanban" />
+          <NavItem to="/dashboard" icon={<LayoutDashboard size={20} strokeWidth={1.8} />} label="Dashboard" />
+          <NavItem to="/queue" icon={<List size={20} strokeWidth={1.8} />} label="Очередь заявок" badge={urgentCount} />
+          <NavItem to="/kanban" icon={<Kanban size={20} strokeWidth={1.8} />} label="Kanban" />
         </nav>
 
         <div className="sidebar-divider" />
@@ -122,7 +121,7 @@ export default function Sidebar() {
           {menuOpen && (
             <div className="sidebar-profile-menu">
               <button type="button" className="sidebar-profile-menu-item" onClick={logout}>
-                <LogoutIcon />
+                <LogOut size={16} strokeWidth={1.8} />
                 Выйти
               </button>
             </div>

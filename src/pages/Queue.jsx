@@ -11,7 +11,7 @@ import {
   statusLabel,
 } from '../data/constants';
 import { getSlaState, formatTimeLeft, computeDeadline } from '../utils/sla';
-import { SearchIcon, CheckCircleIcon, CloseIcon } from '../components/icons/NavIcons';
+import { Search, CheckCircle2, X } from 'lucide-react';
 import './queue.css';
 
 const TABS = [
@@ -195,13 +195,13 @@ export default function Queue() {
         <div className="snackbar-stack">
           {toasts.map((t) => (
             <div key={t.id} className={`snackbar${t.leaving ? ' leaving' : ''}`}>
-              <CheckCircleIcon className="snackbar-icon" />
+              <CheckCircle2 size={20} strokeWidth={1.8} className="snackbar-icon" />
               <div>
                 <p className="snackbar-title">Solution Center</p>
                 <p className="snackbar-body">{t.message}</p>
               </div>
               <button type="button" className="snackbar-close" onClick={() => dismissToast(t.id)}>
-                <CloseIcon />
+                <X size={18} strokeWidth={1.8} />
               </button>
             </div>
           ))}
@@ -209,7 +209,7 @@ export default function Queue() {
       )}
 
       <div className="queue-searchbar">
-        <SearchIcon />
+        <Search size={18} strokeWidth={1.8} />
         <input
           placeholder="Поиск по номеру, автору, теме, категории, отделу, исполнителю..."
           value={search}

@@ -10,10 +10,10 @@ import {
   useDroppable,
 } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { Search } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import { categoryLabel, departmentLabel } from '../data/constants';
-import { SearchIcon } from '../components/icons/NavIcons';
 import './kanban.css';
 
 function assigneeName(users, assigneeId) {
@@ -145,7 +145,7 @@ export default function Kanban() {
   return (
     <div className="kanban-page">
       <div className="kanban-searchbar">
-        <SearchIcon />
+        <Search size={18} strokeWidth={1.8} />
         <input
           placeholder="Поиск по номеру, автору, теме..."
           value={search}
