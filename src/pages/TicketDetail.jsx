@@ -28,6 +28,12 @@ function formatDateTime(iso) {
   return `${formatDate(iso)} | ${pad(hours)}:${pad(d.getMinutes())} ${ampm}`;
 }
 
+function formatHistoryTime(iso) {
+  const d = new Date(iso);
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${formatDate(iso)}, ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 function initials(name) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
@@ -440,7 +446,7 @@ export default function TicketDetail() {
             <ul className="td-history-list">
               {ticket.history.map((h) => (
                 <li key={h.id}>
-                  <span className="td-history-time">{formatDate(h.createdAt)}</span> — {h.message}
+                  <span className="td-history-time">{formatHistoryTime(h.createdAt)}</span> — {h.message}
                 </li>
               ))}
             </ul>

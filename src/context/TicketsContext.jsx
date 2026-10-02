@@ -5,7 +5,7 @@ import { computeDeadline } from '../utils/sla';
 const STORAGE_KEY = 'sd_tickets';
 // Bump whenever the ticket schema (status/priority values, required fields) changes,
 // so browsers with an older cached shape fall back to the fresh seed instead of breaking.
-const STORAGE_VERSION = 7;
+const STORAGE_VERSION = 8;
 const TicketsContext = createContext(null);
 
 function loadTickets() {
