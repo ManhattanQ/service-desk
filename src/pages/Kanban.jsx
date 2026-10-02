@@ -15,10 +15,10 @@ import { SearchIcon } from '../components/icons/NavIcons';
 import './kanban.css';
 
 const COLUMNS = [
-  { status: 'new', title: 'Новые', color: '#4338ca', bg: '#eef2ff' },
-  { status: 'in_progress', title: 'В работе', color: '#1d4ed8', bg: '#e0edff' },
-  { status: 'on_hold', title: 'Ожидают ответа', color: '#b45309', bg: '#fff4e0' },
-  { status: 'closed', title: 'Выполнены', color: '#1a7f37', bg: '#e9f9ee' },
+  { status: 'new', title: 'Новые', color: '#ffffff', bg: '#4338ca' },
+  { status: 'in_progress', title: 'В работе', color: '#ffffff', bg: '#1d4ed8' },
+  { status: 'on_hold', title: 'Ожидают ответа', color: '#ffffff', bg: '#c2660a' },
+  { status: 'closed', title: 'Выполнены', color: '#ffffff', bg: '#15803d' },
 ];
 
 function CardContent({ ticket }) {
