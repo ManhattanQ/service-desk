@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import {
   TICKET_PRIORITIES,
-  TICKET_STATUSES,
   departmentLabel,
   priorityInfo,
   statusLabel,
@@ -115,32 +114,14 @@ export default function TicketDetail() {
     });
   }
 
-  function handleStatusChange(e) {
-    const nextStatus = e.target.value;
-    if (nextStatus === ticket.status) return;
-    let history = pushHistory(`статус изменён: ${statusLabel(ticket.status)} → ${statusLabel(nextStatus)}`, 'status_changed');
-    const changes = { status: nextStatus };
-    if (nextStatus === 'closed') {
-      changes.closedAt = new Date().toISOString();
-      if (!ticket.assigneeId) {
-        changes.assigneeId = currentUser.id;
-        history = appendHistory({ history }, `${currentUser.firstName} ${currentUser.lastName} назначен(а) исполнителем`, 'assigned');
-      }
-    } else if (ticket.status === 'closed') {
-      changes.closedAt = null;
-    }
-    changes.history = history;
-    updateTicket(ticket.id, changes);
-  }
-
   function handleAssign(userId) {
     const user = users.find((u) => u.id === userId);
-    const changes = {
-      assigneeId: userId,
-      status: ticket.status === 'new' ? 'in_progress' : ticket.status,
-      history: pushHistory(`${user.firstName} ${user.lastName} назначен(а) исполнителем`, 'assigned'),
-    };
-    updateTicket(ticket.id, changes);
+    const nextStatus = ticket.status === 'new' ? 'in_progress' : ticket.status;
+    let history = pushHistory(`${user.firstName} ${user.lastName} назначен(а) исполнителем`, 'assigned');
+    if (nextStatus !== ticket.status) {
+      history = appendHistory({ history }, `статус изменён: ${statusLabel(ticket.status)} → ${statusLabel(nextStatus)}`, 'status_changed');
+    }
+    updateTicket(ticket.id, { assigneeId: userId, status: nextStatus, history });
     setAssignOpen(false);
   }
 
@@ -159,19 +140,23 @@ export default function TicketDetail() {
     const body = replyText.trim();
     if (!body) return;
     const authorName = `${currentUser.firstName} ${currentUser.lastName[0]}.`;
+    const isNote = replyMode === 'note';
     const comment = {
       id: `c${Date.now()}`,
       author: authorName,
       body,
-      internal: replyMode === 'note',
+      internal: isNote,
       createdAt: new Date().toISOString(),
     };
-    const historyMessage =
-      replyMode === 'note' ? `${authorName} добавил(а) примечание: «${body}»` : `${authorName}: «${body}»`;
-    updateTicket(ticket.id, {
-      comments: [...ticket.comments, comment],
-      history: pushHistory(historyMessage, replyMode === 'note' ? 'note' : 'comment'),
-    });
+    const historyMessage = isNote ? `${authorName} добавил(а) примечание: «${body}»` : `${authorName}: «${body}»`;
+    let history = pushHistory(historyMessage, isNote ? 'note' : 'comment');
+    const changes = { comments: [...ticket.comments, comment] };
+    if (!isNote && ticket.status !== 'on_hold') {
+      changes.status = 'on_hold';
+      history = appendHistory({ history }, `статус изменён: ${statusLabel(ticket.status)} → ${statusLabel('on_hold')}`, 'status_changed');
+    }
+    changes.history = history;
+    updateTicket(ticket.id, changes);
     setReplyText('');
     setReplyMode(null);
   }
@@ -210,15 +195,9 @@ export default function TicketDetail() {
                 ))}
               </select>
             </span>
-            <span className="td-meta-field">
-              <span className="td-meta-label">Статус</span>
-              <select className="td-meta-select" value={ticket.status} onChange={handleStatusChange}>
-                {TICKET_STATUSES.map((s) => (
-                  <option key={s.value} value={s.value}>
-                    {s.label}
-                  </option>
-                ))}
-              </select>
+            <span>
+              <span className="td-meta-label">Статус </span>
+              {statusLabel(ticket.status)}
             </span>
             <span>
               <span className="td-meta-label">Исполнитель </span>
