@@ -30,7 +30,9 @@ function formatDateTime(iso) {
 }
 
 function initials(name) {
-  return name.trim().slice(0, 2);
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return parts[0] ? parts[0].slice(0, 2).toUpperCase() : '';
 }
 
 function Panel({ title, open, onToggle, children }) {
@@ -71,6 +73,8 @@ export default function TicketDetail() {
   }, [assignOpen]);
 
   const specialists = users.filter((u) => u.role === 'specialist');
+  const assignee = users.find((u) => u.id === ticket?.assigneeId);
+  const assigneeName = assignee ? `${assignee.firstName} ${assignee.lastName}` : 'Не назначен';
 
   const statusTimeline = useMemo(() => {
     if (!ticket) return [];
@@ -114,12 +118,18 @@ export default function TicketDetail() {
   function handleStatusChange(e) {
     const nextStatus = e.target.value;
     if (nextStatus === ticket.status) return;
-    const changes = {
-      status: nextStatus,
-      history: pushHistory(`статус изменён: ${statusLabel(ticket.status)} → ${statusLabel(nextStatus)}`, 'status_changed'),
-    };
-    if (nextStatus === 'closed') changes.closedAt = new Date().toISOString();
-    else if (ticket.status === 'closed') changes.closedAt = null;
+    let history = pushHistory(`статус изменён: ${statusLabel(ticket.status)} → ${statusLabel(nextStatus)}`, 'status_changed');
+    const changes = { status: nextStatus };
+    if (nextStatus === 'closed') {
+      changes.closedAt = new Date().toISOString();
+      if (!ticket.assigneeId) {
+        changes.assigneeId = currentUser.id;
+        history = appendHistory({ history }, `${currentUser.firstName} ${currentUser.lastName} назначен(а) исполнителем`, 'assigned');
+      }
+    } else if (ticket.status === 'closed') {
+      changes.closedAt = null;
+    }
+    changes.history = history;
     updateTicket(ticket.id, changes);
   }
 
@@ -135,11 +145,14 @@ export default function TicketDetail() {
   }
 
   function handleClose() {
-    updateTicket(ticket.id, {
-      status: 'closed',
-      closedAt: new Date().toISOString(),
-      history: pushHistory(`статус изменён: ${statusLabel(ticket.status)} → ${statusLabel('closed')}`, 'closed'),
-    });
+    let history = pushHistory(`статус изменён: ${statusLabel(ticket.status)} → ${statusLabel('closed')}`, 'closed');
+    const changes = { status: 'closed', closedAt: new Date().toISOString() };
+    if (!ticket.assigneeId) {
+      changes.assigneeId = currentUser.id;
+      history = appendHistory({ history }, `${currentUser.firstName} ${currentUser.lastName} назначен(а) исполнителем`, 'assigned');
+    }
+    changes.history = history;
+    updateTicket(ticket.id, changes);
   }
 
   function submitReply() {
@@ -207,22 +220,9 @@ export default function TicketDetail() {
                 ))}
               </select>
             </span>
-            <span className="td-meta-field">
-              <span className="td-meta-label">Исполнитель</span>
-              <select
-                className="td-meta-select"
-                value={ticket.assigneeId ?? ''}
-                onChange={(e) => handleAssign(e.target.value)}
-              >
-                <option value="" disabled>
-                  Не назначен
-                </option>
-                {specialists.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.firstName} {s.lastName}
-                  </option>
-                ))}
-              </select>
+            <span>
+              <span className="td-meta-label">Исполнитель </span>
+              {assigneeName}
             </span>
           </div>
           <div className="td-divider" />
@@ -332,14 +332,16 @@ export default function TicketDetail() {
 
           <Panel title="Информация о заявки" open={infoOpen} onToggle={() => setInfoOpen((v) => !v)}>
             <div className="td-info-actions">
-              <button type="button" className="td-btn td-btn-outline td-btn-sm">
-                Редактировать
-              </button>
               <div className="td-assign-wrap" ref={assignRef}>
-                <button type="button" className="td-btn td-btn-soft td-btn-sm" onClick={() => setAssignOpen((v) => !v)}>
+                <button
+                  type="button"
+                  className="td-btn td-btn-soft td-btn-sm"
+                  disabled={isClosed}
+                  onClick={() => setAssignOpen((v) => !v)}
+                >
                   Назначить
                 </button>
-                {assignOpen && (
+                {assignOpen && !isClosed && (
                   <div className="td-assign-menu">
                     {specialists.map((s) => (
                       <button key={s.id} type="button" className="td-assign-option" onClick={() => handleAssign(s.id)}>
@@ -349,11 +351,6 @@ export default function TicketDetail() {
                   </div>
                 )}
               </div>
-              {!isClosed && (
-                <button type="button" className="td-btn td-btn-outline td-btn-sm" onClick={handleClose}>
-                  Закрыть
-                </button>
-              )}
             </div>
 
             <div className="td-info-card">
