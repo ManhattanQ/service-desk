@@ -18,11 +18,14 @@ function NavItem({ to, icon, label, badge }) {
   );
 }
 
-function PriorityList({ title, dotColor, tickets }) {
+const PRIORITY_DOT_COLOR = { critical: '#f53b57', high: '#ff7504' };
+const VISIBLE_COUNT = 4;
+
+function PriorityList({ title, tickets }) {
   const [scrollable, setScrollable] = useState(false);
   const listRef = useRef(null);
   if (tickets.length === 0) return null;
-  const overflow = tickets.length - 2;
+  const overflow = tickets.length - VISIBLE_COUNT;
 
   function collapse() {
     setScrollable(false);
@@ -32,14 +35,17 @@ function PriorityList({ title, dotColor, tickets }) {
   return (
     <div className="sidebar-priority-group">
       <p className="sidebar-priority-title">
-        <span className="priority-dot" style={{ background: dotColor }} />
+        <span className="priority-dot" style={{ background: '#dc2626' }} />
         {title}
       </p>
       <div ref={listRef} className={`sidebar-priority-list${scrollable ? ' scrollable' : ''}`}>
         {tickets.map((t) => (
           <div key={t.id} className="sidebar-priority-card">
             <div className="sidebar-priority-card-top">
-              <span className="sidebar-priority-number">{t.number}</span>
+              <span className="sidebar-priority-number">
+                <span className="priority-dot" style={{ background: PRIORITY_DOT_COLOR[t.priority] }} />
+                {t.number}
+              </span>
               {t.status === 'on_hold' ? (
                 <span className="sidebar-sla-dash">-</span>
               ) : (
@@ -89,9 +95,14 @@ export default function Sidebar() {
   }, [menuOpen]);
 
   const openTickets = tickets.filter((t) => t.status !== 'closed');
-  const urgentCount = openTickets.filter((t) => t.priority === 'critical' || t.priority === 'high').length;
-  const critical = openTickets.filter((t) => t.priority === 'critical');
-  const high = openTickets.filter((t) => t.priority === 'high');
+  const urgent = openTickets
+    .filter((t) => t.priority === 'critical' || t.priority === 'high')
+    .sort((a, b) => {
+      const timeA = a.status === 'on_hold' ? Infinity : new Date(a.slaDeadline).getTime();
+      const timeB = b.status === 'on_hold' ? Infinity : new Date(b.slaDeadline).getTime();
+      return timeA - timeB;
+    });
+  const urgentCount = urgent.length;
 
   return (
     <aside className="sidebar">
@@ -109,8 +120,7 @@ export default function Sidebar() {
 
         <div className="sidebar-divider" />
 
-        <PriorityList title="Критический приоритет" dotColor="#f53b57" tickets={critical} />
-        <PriorityList title="Высокий приоритет" dotColor="#ff7504" tickets={high} />
+        <PriorityList title="Заявки высокого приоритета" tickets={urgent} />
       </div>
 
       <div className="sidebar-bottom">
