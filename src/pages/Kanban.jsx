@@ -109,7 +109,7 @@ function KanbanColumn({ column, tickets }) {
 }
 
 export default function Kanban() {
-  const { users } = useAuth();
+  const { currentUser, users } = useAuth();
   const { tickets, updateTicket } = useTickets();
   const [search, setSearch] = useState('');
   const [activeId, setActiveId] = useState(null);
@@ -140,16 +140,19 @@ export default function Kanban() {
     if (!over) return;
     const ticket = tickets.find((t) => t.id === active.id);
     if (ticket && ticket.status !== over.id) {
-      const changes = {
-        status: over.id,
-        history: appendHistory(
-          ticket,
-          `статус изменён: ${statusLabel(ticket.status)} → ${statusLabel(over.id)}`,
-          over.id === 'closed' ? 'closed' : 'status_changed',
-        ),
-      };
+      let history = appendHistory(
+        ticket,
+        `статус изменён: ${statusLabel(ticket.status)} → ${statusLabel(over.id)}`,
+        over.id === 'closed' ? 'closed' : 'status_changed',
+      );
+      const changes = { status: over.id };
       if (over.id === 'closed') changes.closedAt = new Date().toISOString();
       else if (ticket.status === 'closed') changes.closedAt = null;
+      if (!ticket.assigneeId && (over.id === 'in_progress' || over.id === 'closed')) {
+        changes.assigneeId = currentUser.id;
+        history = appendHistory({ history }, `${currentUser.firstName} ${currentUser.lastName} назначен(а) исполнителем`, 'assigned');
+      }
+      changes.history = history;
       updateTicket(ticket.id, changes);
     }
   }

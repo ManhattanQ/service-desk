@@ -232,11 +232,14 @@ export default function Queue() {
     selected.forEach((id) => {
       const t = tickets.find((x) => x.id === id);
       if (!t) return;
-      updateTicket(id, {
-        status: 'closed',
-        closedAt: new Date().toISOString(),
-        history: appendHistory(t, `статус изменён: ${statusLabel(t.status)} → ${statusLabel('closed')}`, 'closed'),
-      });
+      let history = appendHistory(t, `статус изменён: ${statusLabel(t.status)} → ${statusLabel('closed')}`, 'closed');
+      const changes = { status: 'closed', closedAt: new Date().toISOString() };
+      if (!t.assigneeId && !isEmployee) {
+        changes.assigneeId = currentUser.id;
+        history = appendHistory({ history }, `${currentUser.firstName} ${currentUser.lastName} назначен(а) исполнителем`, 'assigned');
+      }
+      changes.history = history;
+      updateTicket(id, changes);
     });
     setToast(`Завершено заявок: ${count}.`);
     setSelected([]);

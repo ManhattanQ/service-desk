@@ -5,6 +5,10 @@ import { useAuth } from '../context/AuthContext';
 import { DEPARTMENTS } from '../data/constants';
 import { isValidEmail } from '../utils/validation';
 
+// IT-отдел закреплён за ролью специалиста и назначается только администратором
+// (через существующие учётки), поэтому через самостоятельную регистрацию недоступен.
+const REGISTER_DEPARTMENTS = DEPARTMENTS.filter((d) => d.value !== 'it');
+
 export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -13,7 +17,7 @@ export default function Register() {
     lastName: '',
     email: '',
     password: '',
-    department: DEPARTMENTS[0].value,
+    department: REGISTER_DEPARTMENTS[0].value,
   });
   const [error, setError] = useState('');
 
@@ -76,7 +80,7 @@ export default function Register() {
         <div className="auth-field">
           <label htmlFor="department">Отдел / должность</label>
           <select id="department" value={form.department} onChange={update('department')}>
-            {DEPARTMENTS.map((d) => (
+            {REGISTER_DEPARTMENTS.map((d) => (
               <option key={d.value} value={d.value}>
                 {d.label}
               </option>

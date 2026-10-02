@@ -126,8 +126,16 @@ export default function TicketDetail() {
 
   const lastNoteToAuthor = useMemo(() => {
     if (!ticket) return null;
-    return [...ticket.comments].reverse().find((c) => !c.internal) ?? null;
+    return [...ticket.comments].reverse().find((c) => !c.internal && c.authorId !== ticket.authorId) ?? null;
   }, [ticket]);
+
+  const visibleComments = useMemo(() => {
+    if (!ticket) return [];
+    const isTicketAuthor = currentUser.id === ticket.authorId;
+    if (!isTicketAuthor) return ticket.comments;
+    // Внутренние примечания скрыты от автора заявки, кроме тех, что он сам написал.
+    return ticket.comments.filter((c) => !c.internal || c.authorId === currentUser.id);
+  }, [ticket, currentUser.id]);
 
   if (!ticket) {
     return (
@@ -173,7 +181,7 @@ export default function TicketDetail() {
   function handleClose() {
     let history = pushHistory(`статус изменён: ${statusLabel(ticket.status)} → ${statusLabel('closed')}`, 'closed');
     const changes = { status: 'closed', closedAt: new Date().toISOString() };
-    if (!ticket.assigneeId) {
+    if (!ticket.assigneeId && !isEmployee) {
       changes.assigneeId = currentUser.id;
       history = appendHistory({ history }, `${currentUser.firstName} ${currentUser.lastName} назначен(а) исполнителем`, 'assigned');
     }
@@ -189,6 +197,7 @@ export default function TicketDetail() {
     const comment = {
       id: `c${Date.now()}`,
       author: authorName,
+      authorId: currentUser.id,
       body,
       internal: isNote,
       createdAt: new Date().toISOString(),
@@ -197,7 +206,7 @@ export default function TicketDetail() {
     const historyMessage = isNote ? `${authorName} добавил(а) примечание: «${body}»` : `${authorName}: «${body}»`;
     let history = pushHistory(historyMessage, isNote ? 'note' : 'comment');
     const changes = { comments: [...ticket.comments, comment] };
-    if (!isNote && ticket.status !== 'on_hold') {
+    if (!isNote && !isEmployee && ticket.status !== 'on_hold') {
       changes.status = 'on_hold';
       history = appendHistory({ history }, `статус изменён: ${statusLabel(ticket.status)} → ${statusLabel('on_hold')}`, 'status_changed');
     }
@@ -269,9 +278,9 @@ export default function TicketDetail() {
             </div>
           </div>
 
-          {ticket.comments.length > 0 && (
+          {visibleComments.length > 0 && (
             <div className="td-thread">
-              {ticket.comments.map((c) => (
+              {visibleComments.map((c) => (
                 <div className="td-message" key={c.id}>
                   <span className={`td-avatar ${c.internal ? 'td-avatar-note' : 'td-avatar-specialist'}`}>
                     {initials(c.author)}

@@ -1,6 +1,7 @@
 import { priorityInfo } from '../data/constants';
 
 const DONE_STATUSES = ['closed'];
+const PAUSED_STATUSES = ['on_hold'];
 
 export function computeDeadline(createdAt, priority) {
   const hours = priorityInfo(priority)?.slaHours ?? 24;
@@ -9,6 +10,7 @@ export function computeDeadline(createdAt, priority) {
 
 export function getSlaState(ticket) {
   if (DONE_STATUSES.includes(ticket.status)) return 'done';
+  if (PAUSED_STATUSES.includes(ticket.status)) return 'paused';
   const remainingMs = new Date(ticket.slaDeadline).getTime() - Date.now();
   if (remainingMs <= 0) return 'overdue';
   const totalMs = new Date(ticket.slaDeadline).getTime() - new Date(ticket.createdAt).getTime();
@@ -17,7 +19,7 @@ export function getSlaState(ticket) {
 }
 
 export function formatTimeLeft(ticket) {
-  if (DONE_STATUSES.includes(ticket.status)) return '-';
+  if (DONE_STATUSES.includes(ticket.status) || PAUSED_STATUSES.includes(ticket.status)) return '-';
   const remainingMs = new Date(ticket.slaDeadline).getTime() - Date.now();
   if (remainingMs <= 0) return 'Просрочено';
   const totalMinutes = Math.floor(remainingMs / 60000);
