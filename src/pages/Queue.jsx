@@ -103,11 +103,17 @@ export default function Queue() {
     });
   }
 
+  const lockedStatus = tab === 'new' ? 'new' : tab === 'closed' ? 'closed' : 'all';
+
   function resetFilters() {
-    setFilters({ category: 'all', status: 'all', priority: 'all', department: 'all' });
+    setFilters({ category: 'all', status: lockedStatus, priority: 'all', department: 'all' });
   }
 
-  const hasActiveFilters = Object.values(filters).some((v) => v !== 'all');
+  const hasActiveFilters =
+    filters.category !== 'all' ||
+    filters.status !== lockedStatus ||
+    filters.priority !== 'all' ||
+    filters.department !== 'all';
 
   function setToast(message) {
     const id = ++toastIdRef.current;
