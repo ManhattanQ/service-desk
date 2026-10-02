@@ -141,6 +141,7 @@ export default function TicketDetail() {
   }
 
   const isClosed = ticket.status === 'closed';
+  const isEmployee = currentUser.role === 'employee';
 
   function pushHistory(message, type = 'note') {
     return appendHistory(ticket, message, type);
@@ -231,16 +232,23 @@ export default function TicketDetail() {
               <span className="td-meta-label">Отдел </span>
               {departmentLabel(ticket.department)}
             </span>
-            <span className="td-meta-field">
-              <span className="td-meta-label">Приоритет</span>
-              <select className="td-meta-select" value={ticket.priority} disabled={isClosed} onChange={handlePriorityChange}>
-                {TICKET_PRIORITIES.map((p) => (
-                  <option key={p.value} value={p.value}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-            </span>
+            {isEmployee ? (
+              <span>
+                <span className="td-meta-label">Приоритет </span>
+                {priorityInfo(ticket.priority)?.label}
+              </span>
+            ) : (
+              <span className="td-meta-field">
+                <span className="td-meta-label">Приоритет</span>
+                <select className="td-meta-select" value={ticket.priority} disabled={isClosed} onChange={handlePriorityChange}>
+                  {TICKET_PRIORITIES.map((p) => (
+                    <option key={p.value} value={p.value}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+              </span>
+            )}
             <span>
               <span className="td-meta-label">Статус </span>
               {statusLabel(ticket.status)}
@@ -295,23 +303,27 @@ export default function TicketDetail() {
                 >
                   Ответить
                 </button>
-                <div className="td-assign-wrap" ref={assignRef}>
-                  <button type="button" className="td-btn td-btn-primary" onClick={() => setAssignOpen((v) => !v)}>
-                    Назначить
+                {!isEmployee && (
+                  <div className="td-assign-wrap" ref={assignRef}>
+                    <button type="button" className="td-btn td-btn-primary" onClick={() => setAssignOpen((v) => !v)}>
+                      Назначить
+                    </button>
+                    {assignOpen && (
+                      <div className="td-assign-menu">
+                        {specialists.map((s) => (
+                          <button key={s.id} type="button" className="td-assign-option" onClick={() => handleAssign(s.id)}>
+                            {s.firstName} {s.lastName}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {!isEmployee && (
+                  <button type="button" className="td-btn td-btn-outline" onClick={handleClose}>
+                    Выполнить
                   </button>
-                  {assignOpen && (
-                    <div className="td-assign-menu">
-                      {specialists.map((s) => (
-                        <button key={s.id} type="button" className="td-assign-option" onClick={() => handleAssign(s.id)}>
-                          {s.firstName} {s.lastName}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <button type="button" className="td-btn td-btn-outline" onClick={handleClose}>
-                  Выполнить
-                </button>
+                )}
                 <button
                   type="button"
                   className={`td-btn td-btn-outline${replyMode === 'note' ? ' active' : ''}`}
@@ -387,15 +399,33 @@ export default function TicketDetail() {
         </div>
 
         <div className="td-side">
-          <Panel title="Информация об авторе" open={authorOpen} onToggle={() => setAuthorOpen((v) => !v)}>
-            <div className="td-author-row">
-              <span className="td-avatar td-avatar-author">{initials(ticket.author)}</span>
-              <p className="td-author-name">{ticket.author}</p>
-            </div>
-            <div className="td-divider-light" />
-            <p className="td-author-contact">{ticket.authorEmail}</p>
-            <p className="td-author-contact">{ticket.authorPhone}</p>
-          </Panel>
+          {isEmployee ? (
+            <Panel title="Информация об исполнителе" open={authorOpen} onToggle={() => setAuthorOpen((v) => !v)}>
+              {assignee ? (
+                <>
+                  <div className="td-author-row">
+                    <span className="td-avatar td-avatar-specialist">{initials(assigneeName)}</span>
+                    <p className="td-author-name">{assigneeName}</p>
+                  </div>
+                  <div className="td-divider-light" />
+                  <p className="td-author-contact">{assignee.email}</p>
+                  <p className="td-author-contact">{assignee.phone}</p>
+                </>
+              ) : (
+                <p className="td-info-empty">Специалист ещё не назначен</p>
+              )}
+            </Panel>
+          ) : (
+            <Panel title="Информация об авторе" open={authorOpen} onToggle={() => setAuthorOpen((v) => !v)}>
+              <div className="td-author-row">
+                <span className="td-avatar td-avatar-author">{initials(ticket.author)}</span>
+                <p className="td-author-name">{ticket.author}</p>
+              </div>
+              <div className="td-divider-light" />
+              <p className="td-author-contact">{ticket.authorEmail}</p>
+              <p className="td-author-contact">{ticket.authorPhone}</p>
+            </Panel>
+          )}
 
           <Panel title="История заявки" open={historyOpen} onToggle={() => setHistoryOpen((v) => !v)}>
             <ul className="td-history-list">
@@ -408,6 +438,18 @@ export default function TicketDetail() {
           </Panel>
 
           <Panel title="Информация о заявки" open={infoOpen} onToggle={() => setInfoOpen((v) => !v)}>
+            {isEmployee && (
+              <div className="td-info-actions">
+                <button type="button" className="td-btn td-btn-outline td-btn-sm">
+                  Редактировать
+                </button>
+                {!isClosed && (
+                  <button type="button" className="td-btn td-btn-outline td-btn-sm" onClick={handleClose}>
+                    Закрыть
+                  </button>
+                )}
+              </div>
+            )}
             <div className="td-info-card">
               <div className="td-info-card-header">
                 <span>{ticket.number}</span>

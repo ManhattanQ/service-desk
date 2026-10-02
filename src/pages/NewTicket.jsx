@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, Paperclip, X } from 'lucide-react';
+import { ChevronDown, Plus, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTickets } from '../context/TicketsContext';
 import { TICKET_CATEGORIES, TICKET_PRIORITIES } from '../data/constants';
@@ -134,7 +134,7 @@ export default function NewTicket() {
 
         <input ref={fileInputRef} type="file" multiple className="nt-file-input-hidden" onChange={handleFileSelect} />
         <button type="button" className="nt-btn nt-btn-outline nt-btn-attach" onClick={() => fileInputRef.current?.click()}>
-          <Paperclip size={18} strokeWidth={1.8} />
+          <Plus size={18} strokeWidth={1.8} />
           Прикрепить файл
         </button>
 
