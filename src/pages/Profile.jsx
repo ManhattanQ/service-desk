@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Pencil, Save } from 'lucide-react';
+import { Eye, EyeOff, Pencil, Save } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { DEPARTMENTS, departmentLabel } from '../data/constants';
 import './profile.css';
@@ -29,8 +29,7 @@ export default function Profile() {
   const [phone, setPhone] = useState(currentUser.phone ?? '');
   const [timezone, setTimezone] = useState(currentUser.timezone ?? TIMEZONES[1].value);
   const [avatarUrl, setAvatarUrl] = useState(currentUser.avatarUrl ?? null);
-  const [passwordEditing, setPasswordEditing] = useState(false);
-  const [password, setPassword] = useState(currentUser.password);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [saved, setSaved] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -49,9 +48,7 @@ export default function Profile() {
       phone: phone.trim(),
       timezone,
       avatarUrl,
-      password,
     });
-    setPasswordEditing(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   }
@@ -148,24 +145,20 @@ export default function Profile() {
 
           <div className="pf-password-header">
             <h2>Пароль</h2>
-            <button type="button" className="pf-change-password" onClick={() => setPasswordEditing((v) => !v)}>
-              <Pencil size={13} strokeWidth={2} />
-              Изменить пароль
-            </button>
           </div>
           <div className="pf-field">
             <span className="pf-field-label">Пароль</span>
-            {passwordEditing ? (
-              <input
-                className="pf-input"
-                type="text"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoFocus
-              />
-            ) : (
-              <input className="pf-input" type="password" value={password} disabled />
-            )}
+            <div className="pf-password-row">
+              <input className="pf-input" type={passwordVisible ? 'text' : 'password'} value={currentUser.password} disabled />
+              <button
+                type="button"
+                className="pf-password-toggle"
+                onClick={() => setPasswordVisible((v) => !v)}
+                title={passwordVisible ? 'Скрыть пароль' : 'Показать пароль'}
+              >
+                {passwordVisible ? <EyeOff size={17} strokeWidth={1.8} /> : <Eye size={17} strokeWidth={1.8} />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
