@@ -19,16 +19,14 @@ function NavItem({ to, icon, label, badge }) {
 }
 
 const PRIORITY_DOT_COLOR = { critical: '#f53b57', high: '#ff7504' };
-const VISIBLE_COUNT = 5;
 
 function PriorityList({ title, tickets }) {
   if (tickets.length === 0) return null;
-  const overflow = tickets.length - VISIBLE_COUNT;
 
   return (
     <div className="sidebar-priority-group">
       <p className="sidebar-priority-title">{title}</p>
-      <div className="sidebar-priority-list scrollable">
+      <div className="sidebar-priority-list">
         {tickets.map((t) => (
           <div key={t.id} className="sidebar-priority-card">
             <div className="sidebar-priority-card-top">
@@ -49,7 +47,6 @@ function PriorityList({ title, tickets }) {
           </div>
         ))}
       </div>
-      {overflow > 0 && <p className="sidebar-priority-more-hint">+{overflow} ещё ниже</p>}
     </div>
   );
 }
