@@ -30,18 +30,6 @@ body {
   margin: 0;
 }
 
-@media (max-width: 1920px) {
-  body {
-    zoom: 0.9;
-  }
-}
-
-@media (max-width: 1600px) {
-  body {
-    zoom: 0.85;
-  }
-}
-
 h1, h2, h3 {
   color: var(--text-h);
 }
