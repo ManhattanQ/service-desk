@@ -1,16 +1,46 @@
-# React + Vite
+# Solution Center — Service Desk MVP
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Внутренняя система заявок в IT-поддержку для компании ~300 человек: сотрудники создают заявки вместо сообщений в Telegram и лично, специалисты поддержки ведут их в едином рабочем интерфейсе с контролем сроков (SLA).
 
-Currently, two official plugins are available:
+## Демо
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Vercel:** https://service-desk-wine.vercel.app
+- **GitHub Pages (зеркало):** https://manhattanq.github.io/service-desk/
 
-## React Compiler
+### Демо-доступы
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Доступны прямо на странице входа (блок «Демо-доступы», кнопка «Вставить»):
 
-## Expanding the Oxlint configuration
+| Роль | Email | Пароль |
+|---|---|---|
+| Сотрудник — Ольга Смирнова | `olga.smirnova@company.local` | `olga12345` |
+| Специалист — Алексей Ковалёв | `alexey.kovalev@company.local` | `alexey12345` |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Что внутри
+
+- **Dashboard** — новые / в работе / ожидают пользователя / просроченные / закрытые сегодня, загрузка специалистов (роль специалиста)
+- **Очередь заявок** — таблица с поиском, фильтрами и сортировкой; у сотрудника и специалиста — разный набор вкладок и прав
+- **Создание заявки** — тема, описание, категория, приоритет, вложение (роль сотрудника)
+- **Карточка заявки** — статус, приоритет, исполнитель, комментарии (публичные и внутренние), вложения, полная история действий
+- **Kanban** — Новые / В работе / Ожидают ответа / Выполнены, перетаскивание карточек между колонками
+- **SLA** — Критический 2ч / Высокий 8ч / Средний 24ч / Низкий 72ч, визуальное предупреждение при приближении к просрочке
+- **Профиль** — имя, фото, отдел, контакты, часовой пояс
+
+21 тестовая заявка разных категорий, приоритетов, отделов и статусов уже засеяна в приложении.
+
+## Стек
+
+React 19 · Vite · react-router-dom · dnd-kit (drag-and-drop) · lucide-react · чистый CSS (без UI-фреймворков) · oxlint
+
+Backend и база данных не используются осознанно — только корректная frontend-логика (SLA-дедлайны, статусы, история), а данные хранятся в `localStorage` браузера в структуре, повторяющей будущие таблицы реальной БД.
+
+## Локальный запуск
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
+Приятного просмотра!
