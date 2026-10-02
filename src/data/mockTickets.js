@@ -1,35 +1,209 @@
 import { computeDeadline } from '../utils/sla';
+import { statusLabel } from './constants';
 
 const hoursAgo = (h) => new Date(Date.now() - h * 60 * 60 * 1000).toISOString();
 
 const RAW = [
-  { number: '#01', author: 'Метти', title: 'ВПН', category: 'computers', department: 'accounting', status: 'in_progress', priority: 'high', createdHoursAgo: 0.5 },
-  { number: '#02', author: 'Эндрю', title: 'Принтер', category: 'printers', department: 'accounting', status: 'new', priority: 'high', createdHoursAgo: 1 },
-  { number: '#03', author: 'Мария', title: 'Винда', category: 'network_vpn', department: 'accounting', status: 'new', priority: 'low', createdHoursAgo: 2 },
-  { number: '#04', author: 'Марк', title: 'Платеж', category: 'accounts', department: 'accounting', status: 'new', priority: 'low', createdHoursAgo: 3 },
-  { number: '#05', author: 'Ригина Рижская', title: 'Жку', category: 'other', department: 'sales', status: 'in_progress', priority: 'low', createdHoursAgo: 1 },
-  { number: '#06', author: 'Тонни', title: 'Гпх', category: 'other', department: 'accounting', status: 'in_progress', priority: 'high', createdHoursAgo: 1.5 },
-  { number: '#07', author: 'Роберт', title: 'LXP', category: 'computers', department: 'sales', status: 'in_progress', priority: 'low', createdHoursAgo: 5 },
-  { number: '#08', author: 'Джулия', title: 'Рар файл', category: 'software', department: 'sales', status: 'in_progress', priority: 'high', createdHoursAgo: 8.5 },
-  { number: '#09', author: 'Давид К.', title: 'Зарплата', category: 'accounts', department: 'accounting', status: 'in_progress', priority: 'critical', createdHoursAgo: 3 },
-  { number: '#13', author: 'Якоб', title: 'Который день', category: 'access', department: 'sales', status: 'closed', priority: 'low', createdHoursAgo: 10 },
-  { number: '#10', author: 'Леонид', title: 'Не пришла', category: 'accounts', department: 'accounting', status: 'on_hold', priority: 'medium', createdHoursAgo: 5 },
+  {
+    number: '#01',
+    author: 'Метти',
+    authorEmail: 'Matt.Rogers@gmail.com.au',
+    authorPhone: '+61 0431855911',
+    title: 'ВПН',
+    description:
+      'Здравствуйте,\n\nЯ пытался запустить ВПН у себя на компьютере номер: #0980322.\nЯ обращаюсь к вам потому что не могу включить ВПН именно у себя на компьютере. Не могу подключиться к корпоративному VPN.\nПри подключении появляется ошибка авторизации.\n\nСпасибо,\nМетти.',
+    category: 'computers',
+    department: 'accounting',
+    status: 'in_progress',
+    priority: 'high',
+    createdHoursAgo: 0.5,
+  },
+  {
+    number: '#02',
+    author: 'Эндрю',
+    authorEmail: 'andrew.lee@gmail.com',
+    authorPhone: '+61 0412 334 221',
+    title: 'Принтер',
+    description: 'Здравствуйте, принтер в бухгалтерии не печатает, выдаёт ошибку "Paper Jam", хотя бумага заправлена нормально.',
+    category: 'printers',
+    department: 'accounting',
+    status: 'new',
+    priority: 'high',
+    createdHoursAgo: 1,
+  },
+  {
+    number: '#03',
+    author: 'Мария',
+    authorEmail: 'maria.popova@gmail.com',
+    authorPhone: '+7 916 220 11 03',
+    title: 'Винда',
+    description: 'После обновления Windows компьютер стал загружаться очень долго, около 10 минут. Раньше грузился за минуту.',
+    category: 'network_vpn',
+    department: 'accounting',
+    status: 'new',
+    priority: 'low',
+    createdHoursAgo: 2,
+  },
+  {
+    number: '#04',
+    author: 'Марк',
+    authorEmail: 'mark.ivanov@gmail.com',
+    authorPhone: '+7 916 220 11 04',
+    title: 'Платеж',
+    description: 'Не проходит платёж в системе учёта, зависает на этапе подтверждения. Нужно разобраться до конца дня.',
+    category: 'accounts',
+    department: 'accounting',
+    status: 'new',
+    priority: 'low',
+    createdHoursAgo: 3,
+  },
+  {
+    number: '#05',
+    author: 'Ригина Рижская',
+    authorEmail: 'rigina.rizh@gmail.com',
+    authorPhone: '+7 916 220 11 05',
+    title: 'Жку',
+    description: 'Не могу найти общую папку с документами по ЖКУ на сетевом диске, раньше она была доступна.',
+    category: 'other',
+    department: 'sales',
+    status: 'in_progress',
+    priority: 'low',
+    createdHoursAgo: 1,
+  },
+  {
+    number: '#06',
+    author: 'Тонни',
+    authorEmail: 'tonny.may@gmail.com',
+    authorPhone: '+7 916 220 11 06',
+    title: 'Гпх',
+    description: 'Нужно оформить доступ для нового сотрудника по ГПХ договору, документы уже переданы в отдел кадров.',
+    category: 'other',
+    department: 'accounting',
+    status: 'in_progress',
+    priority: 'high',
+    createdHoursAgo: 1.5,
+  },
+  {
+    number: '#07',
+    author: 'Роберт',
+    authorEmail: 'robert.king@gmail.com',
+    authorPhone: '+7 916 220 11 07',
+    title: 'LXP',
+    description: 'Не загружается обучающая платформа LXP, браузер выдаёт ошибку сертификата безопасности.',
+    category: 'computers',
+    department: 'sales',
+    status: 'in_progress',
+    priority: 'low',
+    createdHoursAgo: 5,
+  },
+  {
+    number: '#08',
+    author: 'Джулия',
+    authorEmail: 'julia.ward@gmail.com',
+    authorPhone: '+7 916 220 11 08',
+    title: 'Рар файл',
+    description: 'Не могу открыть архив .rar, который прислали клиенты — пишет "файл повреждён". Нужна помощь или альтернативный способ открыть.',
+    category: 'software',
+    department: 'sales',
+    status: 'in_progress',
+    priority: 'high',
+    createdHoursAgo: 8.5,
+  },
+  {
+    number: '#09',
+    author: 'Давид К.',
+    authorEmail: 'david.k@gmail.com',
+    authorPhone: '+7 916 220 11 09',
+    title: 'Зарплата',
+    description: 'Не могу зайти в систему расчёта зарплаты, пишет "неверный пароль", хотя пароль точно верный. Сегодня день выплат, очень срочно.',
+    category: 'accounts',
+    department: 'accounting',
+    status: 'in_progress',
+    priority: 'critical',
+    createdHoursAgo: 3,
+  },
+  {
+    number: '#13',
+    author: 'Якоб',
+    authorEmail: 'jakob.n@gmail.com',
+    authorPhone: '+7 916 220 11 13',
+    title: 'Который день',
+    description: 'Прошу выдать доступ в общий календарь отдела, коллеги уже давно им пользуются.',
+    category: 'access',
+    department: 'sales',
+    status: 'closed',
+    priority: 'low',
+    createdHoursAgo: 10,
+  },
+  {
+    number: '#10',
+    author: 'Леонид',
+    authorEmail: 'leonid.p@gmail.com',
+    authorPhone: '+7 916 220 11 10',
+    title: 'Не пришла',
+    description: 'Не пришла учётная запись для входа в CRM, хотя заявку на доступ оформили ещё в понедельник.',
+    category: 'accounts',
+    department: 'accounting',
+    status: 'on_hold',
+    priority: 'medium',
+    createdHoursAgo: 5,
+  },
 ];
 
+function buildHistory(t, id, createdAt) {
+  const entries = [{ id: `${id}-h1`, type: 'created', message: `${t.author} создал(а) заявку`, createdAt }];
+  const createdMs = new Date(createdAt).getTime();
+  const step = (t.createdHoursAgo * 60 * 60 * 1000) / 4;
+
+  if (t.status !== 'new') {
+    const inProgressAt = new Date(createdMs + step).toISOString();
+    entries.push({
+      id: `${id}-h2`,
+      type: 'status_changed',
+      message: `статус изменён: Новая → ${statusLabel('in_progress')}`,
+      createdAt: inProgressAt,
+    });
+  }
+  if (t.status === 'on_hold') {
+    entries.push({
+      id: `${id}-h3`,
+      type: 'status_changed',
+      message: `статус изменён: В работе → ${statusLabel('on_hold')}`,
+      createdAt: new Date(createdMs + step * 2).toISOString(),
+    });
+  }
+  if (t.status === 'closed') {
+    entries.push({
+      id: `${id}-h3`,
+      type: 'closed',
+      message: `статус изменён: В работе → ${statusLabel('closed')}`,
+      createdAt: new Date(createdMs + step * 3).toISOString(),
+    });
+  }
+  return entries;
+}
+
 export const SEED_TICKETS = RAW.map((t, i) => {
+  const id = `t${i + 1}`;
   const createdAt = hoursAgo(t.createdHoursAgo);
+  const closedAt = t.status === 'closed' ? new Date(new Date(createdAt).getTime() + (t.createdHoursAgo * 60 * 60 * 1000 * 3) / 4).toISOString() : null;
   return {
-    id: `t${i + 1}`,
+    id,
     number: t.number,
     author: t.author,
+    authorEmail: t.authorEmail,
+    authorPhone: t.authorPhone,
     title: t.title,
+    description: t.description,
     category: t.category,
     department: t.department,
     status: t.status,
     priority: t.priority,
+    assigneeId: null,
     createdAt,
+    closedAt,
     slaDeadline: computeDeadline(createdAt, t.priority),
     comments: [],
-    history: [{ id: `h${i + 1}`, type: 'created', message: `${t.author} создал(а) заявку`, createdAt }],
+    history: buildHistory(t, id, createdAt),
   };
 });
