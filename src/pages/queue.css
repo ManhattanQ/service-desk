@@ -358,19 +358,13 @@
   cursor: pointer;
 }
 
-.btn-hold {
-  background: #fff4e0;
-  color: #b45309;
+.btn-neutral {
+  background: #f0f0f0;
+  color: #374151;
 }
 
-.btn-resume {
-  background: #e0edff;
-  color: #1d4ed8;
-}
-
-.btn-close {
-  background: #e9f9ee;
-  color: #1a7f37;
+.btn-neutral:hover {
+  background: #e4e4e4;
 }
 
 /* На ноутбучных экранах с масштабированием ОС (эффективная ширина

@@ -164,6 +164,12 @@ export default function Queue() {
     [filtered],
   );
 
+  const canResume = useMemo(() => {
+    if (selected.length === 0) return false;
+    const selectedTickets = tickets.filter((t) => selected.includes(t.id));
+    return selectedTickets.every((t) => t.status === 'on_hold');
+  }, [selected, tickets]);
+
   function toggleAll() {
     setSelected((s) => (s.length > 0 && s.length === selectableIds.length ? [] : selectableIds));
   }
@@ -178,13 +184,6 @@ export default function Queue() {
     const count = selected.length;
     selected.forEach((id) => updateTicket(id, { status: 'closed', closedAt: new Date().toISOString() }));
     setToast(`Завершено заявок: ${count}.`);
-    setSelected([]);
-  }
-
-  function handleHold() {
-    const count = selected.length;
-    selected.forEach((id) => updateTicket(id, { status: 'on_hold' }));
-    setToast(`Переведено в ожидание ответа: ${count}.`);
     setSelected([]);
   }
 
@@ -295,7 +294,7 @@ export default function Queue() {
               onClick={resetFilters}
               title="Сбросить фильтры"
             >
-              <RotateCcw size={15} strokeWidth={1.8} />
+              <RotateCcw size={17} strokeWidth={2} />
             </button>
           )}
         </div>
@@ -396,13 +395,12 @@ export default function Queue() {
           <button type="button" className="btn-primary" onClick={handleAssign}>
             Взять в работу
           </button>
-          <button type="button" className="btn-pill btn-hold" onClick={handleHold}>
-            Ожидание ответа
-          </button>
-          <button type="button" className="btn-pill btn-resume" onClick={handleResume}>
-            Возобновить
-          </button>
-          <button type="button" className="btn-pill btn-close" onClick={handleClose}>
+          {canResume && (
+            <button type="button" className="btn-pill btn-neutral" onClick={handleResume}>
+              Возобновить
+            </button>
+          )}
+          <button type="button" className="btn-pill btn-neutral" onClick={handleClose}>
             Завершить
           </button>
         </div>
