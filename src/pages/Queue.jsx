@@ -17,12 +17,17 @@ import { appendHistory } from '../utils/history';
 import { Search, CheckCircle2, X, RotateCcw } from 'lucide-react';
 import './queue.css';
 
-const TABS = [
+const SPECIALIST_TABS = [
   { value: 'all', label: 'Все заявки' },
   { value: 'mine', label: 'Мои заявки' },
   { value: 'new', label: 'Новые заявки' },
   { value: 'urgent', label: 'Заявки высокого приоритета' },
   { value: 'closed', label: 'Выполненные' },
+];
+
+const EMPLOYEE_TABS = [
+  { value: 'mine', label: 'Мои заявки' },
+  { value: 'urgent', label: 'Заявки высокого приоритета' },
 ];
 
 function formatDate(iso) {
@@ -83,7 +88,9 @@ export default function Queue() {
   const navigate = useNavigate();
   const { currentUser, users } = useAuth();
   const { tickets, updateTicket } = useTickets();
-  const [tab, setTab] = useState('all');
+  const isEmployee = currentUser.role === 'employee';
+  const TABS = isEmployee ? EMPLOYEE_TABS : SPECIALIST_TABS;
+  const [tab, setTab] = useState(isEmployee ? 'mine' : 'all');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState([]);
   const [toasts, setToasts] = useState([]);
@@ -138,10 +145,11 @@ export default function Queue() {
       list = list.filter((t) => t.status === 'closed');
     } else {
       list = list.filter((t) => t.status !== 'closed');
-      if (tab === 'mine') list = list.filter((t) => t.assigneeId === currentUser.id);
+      if (tab === 'mine') list = list.filter((t) => (isEmployee ? t.authorId === currentUser.id : t.assigneeId === currentUser.id));
       if (tab === 'new') list = list.filter((t) => t.status === 'new');
       if (tab === 'urgent') list = list.filter((t) => t.priority === 'critical' || t.priority === 'high');
     }
+    if (isEmployee) list = list.filter((t) => t.authorId === currentUser.id);
     if (filters.category !== 'all') list = list.filter((t) => t.category === filters.category);
     if (filters.status !== 'all') list = list.filter((t) => t.status === filters.status);
     if (filters.priority !== 'all') list = list.filter((t) => t.priority === filters.priority);
@@ -167,7 +175,7 @@ export default function Queue() {
       });
     }
     return list;
-  }, [tickets, tab, search, currentUser.id, sort, users, filters]);
+  }, [tickets, tab, search, currentUser.id, isEmployee, sort, users, filters]);
 
   function handleSort(field) {
     setSort((s) => (s.field === field ? { field, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { field, dir: 'asc' }));
@@ -197,8 +205,8 @@ export default function Queue() {
     [selected, tickets],
   );
 
-  const canAssign = selectedTickets.length > 0 && selectedTickets.every((t) => t.status === 'new');
-  const canResume = selectedTickets.length > 0 && selectedTickets.every((t) => t.status === 'on_hold');
+  const canAssign = !isEmployee && selectedTickets.length > 0 && selectedTickets.every((t) => t.status === 'new');
+  const canResume = !isEmployee && selectedTickets.length > 0 && selectedTickets.every((t) => t.status === 'on_hold');
   const canClose = selectedTickets.length > 0 && selectedTickets.every((t) => t.status !== 'closed');
 
   function toggleAll() {
@@ -291,69 +299,71 @@ export default function Queue() {
             </button>
           ))}
         </div>
-        <div className="queue-toolbar-actions">
-          <span className="queue-filter-label">Фильтр</span>
-          <select
-            className="queue-filter-select"
-            value={filters.category}
-            onChange={(e) => setFilter('category', e.target.value)}
-          >
-            <option value="all">Все категории</option>
-            {TICKET_CATEGORIES.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-          <select
-            className="queue-filter-select"
-            value={filters.status}
-            disabled={tab === 'new' || tab === 'closed'}
-            onChange={(e) => setFilter('status', e.target.value)}
-          >
-            <option value="all">Все статусы</option>
-            {TICKET_STATUSES.filter((s) => tab === 'closed' || s.value !== 'closed').map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-          <select
-            className="queue-filter-select"
-            value={filters.priority}
-            disabled={tab === 'urgent'}
-            onChange={(e) => setFilter('priority', e.target.value)}
-          >
-            <option value="all">Все приоритеты</option>
-            {TICKET_PRIORITIES.map((p) => (
-              <option key={p.value} value={p.value}>
-                {p.label}
-              </option>
-            ))}
-          </select>
-          <select
-            className="queue-filter-select"
-            value={filters.department}
-            onChange={(e) => setFilter('department', e.target.value)}
-          >
-            <option value="all">Все отделы</option>
-            {DEPARTMENTS.map((d) => (
-              <option key={d.value} value={d.value}>
-                {d.label}
-              </option>
-            ))}
-          </select>
-          {hasActiveFilters && (
-            <button
-              type="button"
-              className="queue-filter-reset"
-              onClick={resetFilters}
-              title="Сбросить фильтры"
+        {!isEmployee && (
+          <div className="queue-toolbar-actions">
+            <span className="queue-filter-label">Фильтр</span>
+            <select
+              className="queue-filter-select"
+              value={filters.category}
+              onChange={(e) => setFilter('category', e.target.value)}
             >
-              <RotateCcw size={17} strokeWidth={2} />
-            </button>
-          )}
-        </div>
+              <option value="all">Все категории</option>
+              {TICKET_CATEGORIES.map((c) => (
+                <option key={c.value} value={c.value}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
+            <select
+              className="queue-filter-select"
+              value={filters.status}
+              disabled={tab === 'new' || tab === 'closed'}
+              onChange={(e) => setFilter('status', e.target.value)}
+            >
+              <option value="all">Все статусы</option>
+              {TICKET_STATUSES.filter((s) => tab === 'closed' || s.value !== 'closed').map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+            <select
+              className="queue-filter-select"
+              value={filters.priority}
+              disabled={tab === 'urgent'}
+              onChange={(e) => setFilter('priority', e.target.value)}
+            >
+              <option value="all">Все приоритеты</option>
+              {TICKET_PRIORITIES.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+            <select
+              className="queue-filter-select"
+              value={filters.department}
+              onChange={(e) => setFilter('department', e.target.value)}
+            >
+              <option value="all">Все отделы</option>
+              {DEPARTMENTS.map((d) => (
+                <option key={d.value} value={d.value}>
+                  {d.label}
+                </option>
+              ))}
+            </select>
+            {hasActiveFilters && (
+              <button
+                type="button"
+                className="queue-filter-reset"
+                onClick={resetFilters}
+                title="Сбросить фильтры"
+              >
+                <RotateCcw size={17} strokeWidth={2} />
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="queue-table-card">
@@ -409,31 +419,35 @@ export default function Queue() {
                   <td>
                     <span className={`status-badge status-${t.status}`}>{statusLabel(t.status)}</span>
                   </td>
-                  <td onClick={(e) => e.stopPropagation()}>
-                    <select
-                      className="queue-select"
-                      value={t.priority}
-                      disabled={isDone}
-                      onChange={(e) => {
-                        const priority = e.target.value;
-                        updateTicket(t.id, {
-                          priority,
-                          slaDeadline: computeDeadline(t.createdAt, priority),
-                          history: appendHistory(
-                            t,
-                            `приоритет изменён: ${priorityInfo(t.priority)?.label} → ${priorityInfo(priority)?.label}`,
-                            'priority_changed',
-                          ),
-                        });
-                      }}
-                    >
-                      {TICKET_PRIORITIES.map((p) => (
-                        <option key={p.value} value={p.value}>
-                          {p.label}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
+                  {isEmployee ? (
+                    <td>{priorityInfo(t.priority)?.label}</td>
+                  ) : (
+                    <td onClick={(e) => e.stopPropagation()}>
+                      <select
+                        className="queue-select"
+                        value={t.priority}
+                        disabled={isDone}
+                        onChange={(e) => {
+                          const priority = e.target.value;
+                          updateTicket(t.id, {
+                            priority,
+                            slaDeadline: computeDeadline(t.createdAt, priority),
+                            history: appendHistory(
+                              t,
+                              `приоритет изменён: ${priorityInfo(t.priority)?.label} → ${priorityInfo(priority)?.label}`,
+                              'priority_changed',
+                            ),
+                          });
+                        }}
+                      >
+                        {TICKET_PRIORITIES.map((p) => (
+                          <option key={p.value} value={p.value}>
+                            {p.label}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                  )}
                   <td>
                     {isDone || isOnHold ? (
                       <span className="sla-dash">-</span>
