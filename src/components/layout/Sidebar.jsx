@@ -18,7 +18,7 @@ function NavItem({ to, icon, label, badge }) {
   );
 }
 
-const PRIORITY_DOT_COLOR = { critical: '#f53b57', high: '#ff7504' };
+const PRIORITY_DOT_COLOR = { critical: '#f53b57', high: '#ff7504', medium: '#ca8a04', low: '#6b7280' };
 
 function PriorityList({ title, tickets }) {
   if (tickets.length === 0) return null;
@@ -74,14 +74,12 @@ export default function Sidebar() {
   }, [menuOpen]);
 
   const openTickets = tickets.filter((t) => t.status !== 'closed');
-  const urgent = openTickets
-    .filter((t) => t.priority === 'critical' || t.priority === 'high')
-    .sort((a, b) => {
-      const timeA = a.status === 'on_hold' ? Infinity : new Date(a.slaDeadline).getTime();
-      const timeB = b.status === 'on_hold' ? Infinity : new Date(b.slaDeadline).getTime();
-      return timeA - timeB;
-    });
-  const urgentCount = urgent.length;
+  const byTimeLeft = [...openTickets].sort((a, b) => {
+    const timeA = a.status === 'on_hold' ? Infinity : new Date(a.slaDeadline).getTime();
+    const timeB = b.status === 'on_hold' ? Infinity : new Date(b.slaDeadline).getTime();
+    return timeA - timeB;
+  });
+  const urgentCount = openTickets.filter((t) => t.priority === 'critical' || t.priority === 'high').length;
 
   return (
     <aside className="sidebar">
@@ -99,7 +97,7 @@ export default function Sidebar() {
 
         <div className="sidebar-divider" />
 
-        <PriorityList title="Заявки высокого приоритета" tickets={urgent} />
+        <PriorityList title="Заявки высокого приоритета" tickets={byTimeLeft} />
       </div>
 
       <div className="sidebar-bottom">
