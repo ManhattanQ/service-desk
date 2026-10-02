@@ -350,6 +350,11 @@ export default function TicketDetail() {
                 >
                   Ответить
                 </button>
+                {isEmployee && (
+                  <button type="button" className="td-btn td-btn-outline" onClick={handleClose}>
+                    Закрыть
+                  </button>
+                )}
                 {!isEmployee && (
                   <div className="td-assign-wrap" ref={assignRef}>
                     <button type="button" className="td-btn td-btn-primary" onClick={() => setAssignOpen((v) => !v)}>
@@ -485,18 +490,6 @@ export default function TicketDetail() {
           </Panel>
 
           <Panel title="Информация о заявки" open={infoOpen} onToggle={() => setInfoOpen((v) => !v)}>
-            {isEmployee && (
-              <div className="td-info-actions">
-                <button type="button" className="td-btn td-btn-outline td-btn-sm">
-                  Редактировать
-                </button>
-                {!isClosed && (
-                  <button type="button" className="td-btn td-btn-outline td-btn-sm" onClick={handleClose}>
-                    Закрыть
-                  </button>
-                )}
-              </div>
-            )}
             <div className="td-info-card">
               <div className="td-info-card-header">
                 <span>{ticket.number}</span>
