@@ -22,6 +22,98 @@ const TILES = [
   { key: 'closed_today', label: 'Закрыты сегодня', color: '#1a7f37', bg: '#e9f9ee' },
 ];
 
+const STATUS_SEGMENTS = [
+  { key: 'new', label: 'Новая', color: '#4338ca' },
+  { key: 'in_progress', label: 'В работе', color: '#1d4ed8' },
+  { key: 'on_hold', label: 'Ожидает ответа', color: '#b45309' },
+  { key: 'closed', label: 'Выполнена', color: '#1a7f37' },
+];
+
+function buildSegments(data, circumference) {
+  const total = data.reduce((s, d) => s + d.value, 0);
+  let acc = 0;
+  const segments = data.map((d) => {
+    const frac = total > 0 ? d.value / total : 0;
+    const dash = frac * circumference;
+    const seg = { ...d, dash, offset: acc };
+    acc += dash;
+    return seg;
+  });
+  return { segments, total };
+}
+
+function DonutChart({ data, centerLabel }) {
+  const radius = 54;
+  const circumference = 2 * Math.PI * radius;
+  const { segments, total } = buildSegments(data, circumference);
+  return (
+    <svg viewBox="0 0 140 140" width="140" height="140" role="img" aria-label="Распределение заявок по статусам">
+      <g transform="rotate(-90 70 70)">
+        <circle cx="70" cy="70" r={radius} fill="none" stroke="#f0f0f0" strokeWidth="18" />
+        {total > 0 &&
+          segments
+            .filter((s) => s.value > 0)
+            .map((s) => (
+              <circle
+                key={s.key}
+                cx="70"
+                cy="70"
+                r={radius}
+                fill="none"
+                stroke={s.color}
+                strokeWidth="18"
+                strokeDasharray={`${s.dash} ${circumference - s.dash}`}
+                strokeDashoffset={-s.offset}
+              />
+            ))}
+      </g>
+      <text x="70" y="70" textAnchor="middle" dominantBaseline="central" fontSize="24" fontWeight="700" fill="#111111">
+        {centerLabel ?? total}
+      </text>
+    </svg>
+  );
+}
+
+function SlaGauge({ healthy, breached }) {
+  const radius = 54;
+  const circumference = 2 * Math.PI * radius;
+  const total = healthy + breached;
+  const pct = total > 0 ? Math.round((healthy / total) * 100) : 100;
+  const { segments } = buildSegments(
+    [
+      { key: 'healthy', color: '#41ce65', value: healthy },
+      { key: 'breached', color: '#f53b57', value: breached },
+    ],
+    circumference,
+  );
+  return (
+    <svg viewBox="0 0 140 140" width="140" height="140" role="img" aria-label="Доля заявок в рамках SLA">
+      <g transform="rotate(-90 70 70)">
+        <circle cx="70" cy="70" r={radius} fill="none" stroke="#f0f0f0" strokeWidth="18" />
+        {total > 0 &&
+          segments
+            .filter((s) => s.value > 0)
+            .map((s) => (
+              <circle
+                key={s.key}
+                cx="70"
+                cy="70"
+                r={radius}
+                fill="none"
+                stroke={s.color}
+                strokeWidth="18"
+                strokeDasharray={`${s.dash} ${circumference - s.dash}`}
+                strokeDashoffset={-s.offset}
+              />
+            ))}
+      </g>
+      <text x="70" y="70" textAnchor="middle" dominantBaseline="central" fontSize="24" fontWeight="700" fill="#111111">
+        {pct}%
+      </text>
+    </svg>
+  );
+}
+
 export default function Dashboard() {
   const { users } = useAuth();
   const { tickets } = useTickets();
@@ -35,6 +127,21 @@ export default function Dashboard() {
       (t) => t.status === 'closed' && t.closedAt && isToday(t.closedAt),
     ).length;
     return { new: newCount, in_progress: inProgress, on_hold: onHold, overdue, closed_today: closedToday };
+  }, [tickets]);
+
+  const statusData = useMemo(
+    () =>
+      STATUS_SEGMENTS.map((s) => ({
+        ...s,
+        value: tickets.filter((t) => t.status === s.key).length,
+      })),
+    [tickets],
+  );
+
+  const slaCounts = useMemo(() => {
+    const open = tickets.filter((t) => t.status !== 'closed');
+    const breached = open.filter((t) => getSlaState(t) === 'overdue').length;
+    return { healthy: open.length - breached, breached };
   }, [tickets]);
 
   const workload = useMemo(() => {
@@ -60,6 +167,44 @@ export default function Dashboard() {
             <p className="dashboard-tile-label">{t.label}</p>
           </div>
         ))}
+      </div>
+
+      <div className="dashboard-charts">
+        <div className="dashboard-card">
+          <h2 className="dashboard-subtitle">Заявки по статусам</h2>
+          <div className="dashboard-chart-row">
+            <DonutChart data={statusData} />
+            <div className="dashboard-legend">
+              {statusData.map((s) => (
+                <div key={s.key} className="dashboard-legend-row">
+                  <span className="legend-dot" style={{ background: s.color }} />
+                  <span className="legend-label">{s.label}</span>
+                  <span className="legend-value">{s.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="dashboard-card">
+          <h2 className="dashboard-subtitle">SLA сейчас</h2>
+          <div className="dashboard-chart-row">
+            <SlaGauge healthy={slaCounts.healthy} breached={slaCounts.breached} />
+            <div className="dashboard-legend">
+              <div className="dashboard-legend-row">
+                <span className="legend-dot" style={{ background: '#41ce65' }} />
+                <span className="legend-label">В рамках SLA</span>
+                <span className="legend-value">{slaCounts.healthy}</span>
+              </div>
+              <div className="dashboard-legend-row">
+                <span className="legend-dot" style={{ background: '#f53b57' }} />
+                <span className="legend-label">Просрочено</span>
+                <span className="legend-value">{slaCounts.breached}</span>
+              </div>
+              <p className="dashboard-chart-note">Доля открытых заявок, уложившихся в SLA прямо сейчас</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <h2 className="dashboard-subtitle">Загрузка специалистов поддержки</h2>

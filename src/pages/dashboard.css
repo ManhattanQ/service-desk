@@ -40,6 +40,69 @@
   margin: 0 0 16px;
 }
 
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 420px));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.dashboard-card {
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 24px;
+  padding: 20px 24px;
+}
+
+.dashboard-chart-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.dashboard-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.dashboard-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-label {
+  flex: 1;
+  font-size: 14px;
+  color: #111111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.legend-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111111;
+}
+
+.dashboard-chart-note {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  line-height: 1.4;
+}
+
 .dashboard-workload {
   background: #ffffff;
   border: 1px solid #e6e6e6;
