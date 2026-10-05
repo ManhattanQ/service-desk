@@ -13,7 +13,7 @@ import AppLayout from './components/layout/AppLayout';
 
 function RequireAuth({ children }) {
   const { currentUser } = useAuth();
-  if (!currentUser) return <Navigate to="/login" replace />;
+  if (!currentUser) return <Navigate to="/register" replace />;
   return children;
 }
 
